@@ -13,7 +13,7 @@ import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import L, { LatLng } from "leaflet";
 import { Game } from "../classes/Game";
 function LocationMarker() {
-  const [position, setPosition] = useState<LatLng | null>(null);
+  const [position, setPosition] = useState(null);
   const map = useMapEvents({
     click() {
       map.locate();
@@ -31,8 +31,15 @@ function LocationMarker() {
   );
 }
 
-function Map({ game, height }: { game: Game; height: string }) {
+function Map({ game, height }) {
   console.log("render map. height: ", height);
+  // Before map is being initialized.
+  var mapsPlaceholder = [];
+
+  L.Map.addInitHook(function () {
+    mapsPlaceholder.push(this); // Use whatever global scope variable you like.
+  });
+  console.log("maps", mapsPlaceholder);
   return (
     <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: height }}>
       <TileLayer

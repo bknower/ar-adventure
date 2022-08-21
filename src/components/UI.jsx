@@ -8,44 +8,50 @@ import PlaceIcon from "@mui/icons-material/Place";
 import { Game } from "../classes/Game";
 import Map from "./Map";
 import Inventory from "./Inventory";
-import { resolveSoa } from "dns";
+import L, { LatLng } from "leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  useMap,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
 
-function UI({ game }: { game: Game }) {
-  const [page, setPage] = useState("map");
-  const [bottomBarRef, setBottomBarRef] = useState<any>(null);
+function UI({ game }) {
+  const [page, setPage] = useState("");
+  const map = useRef(null);
+
+  const [bottomBarRef, setBottomBarRef] = useState(null);
   const [pageHeight, setPageHeight] = useState("100px");
-  const [resetting, setResetting] = useState(false);
-
+  useEffect(() => {
+    setPage("map");
+  }, []);
   const updatePageHeight = () => {
-    if (bottomBarRef !== null) {
+    if (map.current && bottomBarRef !== null) {
       const height = bottomBarRef.clientHeight;
       const windowHeight = window.innerHeight;
       setPageHeight(windowHeight - height + "px");
+      console.log("map: ", L);
+      // @ts-ignore
+      // L.map("Map").invalidateSize();
+      // console.log(window.Map);
+      map.current.invalidateSize();
+
+      // window.Map.leafletList[0].map.invalidateSize();
       console.log("updated", windowHeight - height);
-      setResetting(true);
     }
   };
   window.addEventListener("resize", updatePageHeight);
   useEffect(() => {
     updatePageHeight();
-  }, [bottomBarRef]);
-  useEffect(() => {
-    if (resetting) {
-      setResetting(false);
-      console.log("resetting false");
-    }
-  });
-  useEffect(() => {
-    if (resetting) {
-      setResetting(false);
-      console.log("resetting false");
-    }
-  }, [resetting]);
+  }, [bottomBarRef, page]);
+
   return (
     <>
-      {!resetting
-        ? page === "map" && <Map game={game} height={pageHeight} />
-        : null}
+      <div style={{ display: page === "map" ? "block" : "none" }}>
+        <Map game={game} height={pageHeight} map={map} />
+      </div>
       {page === "inventory" && <Inventory game={game} />}
       <Paper
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
