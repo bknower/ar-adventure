@@ -11,7 +11,7 @@ import {
 import icon from "leaflet/dist/images/marker-icon.png";
 import iconShadow from "leaflet/dist/images/marker-shadow.png";
 import L, { LatLng } from "leaflet";
-
+import { Game } from "../classes/Game";
 function LocationMarker() {
   const [position, setPosition] = useState<LatLng | null>(null);
   const map = useMapEvents({
@@ -31,9 +31,10 @@ function LocationMarker() {
   );
 }
 
-function Map() {
+function Map({ game, height }: { game: Game; height: string }) {
+  console.log("render map. height: ", height);
   return (
-    <MapContainer center={[51.505, -0.09]} zoom={13}>
+    <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: height }}>
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

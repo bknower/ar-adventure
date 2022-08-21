@@ -9,5 +9,9 @@ export class Clothing extends Item {
       this.worn = true;
       console.log(`You put on ${this.name}.`);
     };
+    this.actions["take off"] = () => {
+      this.worn = false;
+      console.log(`You take off ${this.name}.`);
+    };
   }
 }
