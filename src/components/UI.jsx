@@ -32,14 +32,7 @@ function UI({ game }) {
       const height = bottomBarRef.clientHeight;
       const windowHeight = window.innerHeight;
       setPageHeight(windowHeight - height + "px");
-      console.log("map: ", L);
-      // @ts-ignore
-      // L.map("Map").invalidateSize();
-      // console.log(window.Map);
       map.current.invalidateSize();
-
-      // window.Map.leafletList[0].map.invalidateSize();
-      console.log("updated", windowHeight - height);
     }
   };
   window.addEventListener("resize", updatePageHeight);
