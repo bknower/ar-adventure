@@ -1,10 +1,12 @@
 import { Player } from "./Player";
 import { Place } from "./Place";
-
 import L, { LatLng } from "leaflet";
+import { Messages } from "./Messages";
 
 const outside = new Place("Outside", "You are outside", undefined);
 const maxDistance = 25;
+var log: Messages;
+
 export class Game {
   over: boolean = false;
   places: Place[] = [];
@@ -14,7 +16,7 @@ export class Game {
     this.start();
   }
   start() {
-    console.log("Welcome to the game.");
+    // globalThis.log.send("Welcome to the game.");
     // while (!this.over) {
     //   this.updatePlayerLocation(this.places);
     // }
