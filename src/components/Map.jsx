@@ -88,6 +88,7 @@ const Map = ({ game, height, map }) => {
       );
     });
     for (const [name, location] of Object.entries(markers)) {
+      L.circle(location, { radius: 15 }).addTo(map.current);
       L.marker(location).bindTooltip(name).addTo(map.current);
     }
   }

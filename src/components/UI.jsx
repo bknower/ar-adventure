@@ -24,6 +24,7 @@ import {
 } from "react-leaflet";
 import MessageModal from "./MessageModal";
 import { Messages } from "../classes/Messages";
+import Room from "./Room";
 /*global globalThis*/
 
 const style = {
@@ -37,20 +38,18 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-function UI() {
+function UI({ game }) {
   const [page, setPage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
   const map = useRef(null);
-  var game;
 
   const [bottomBarRef, setBottomBarRef] = useState(null);
   const [pageHeight, setPageHeight] = useState("100px");
   useEffect(() => {
-    setPage("map");
+    setPage("nearme");
     globalThis.log = new Messages(() => {
       setShowMessage(true);
     });
-    game = new Game();
   }, []);
   const updatePageHeight = () => {
     if (map.current && bottomBarRef !== null) {
@@ -71,6 +70,7 @@ function UI() {
         <Map game={game} height={pageHeight} map={map} />
       </div>
       {page === "inventory" && <Inventory game={game} />}
+      {page === "nearme" && <Room game={game} />}
       <Modal
         open={showMessage}
         onClose={() => setShowMessage(false)}
