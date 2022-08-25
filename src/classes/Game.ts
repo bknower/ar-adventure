@@ -2,10 +2,16 @@ import { Player } from "./Player";
 import { Place } from "./Place";
 import L, { LatLng } from "leaflet";
 import { Messages } from "./Messages";
+import { DialogTree } from "./DialogTree";
 
 const outside = new Place("Outside", "You are outside", undefined);
 const maxDistance = 25;
 var log: Messages;
+
+// const d = new DialogTree("Hello", [
+//   new DialogTree()
+// ]
+const d = [{ msg: "Hello" }, { msg: "Hello2" }];
 
 export class Game {
   over: boolean = false;

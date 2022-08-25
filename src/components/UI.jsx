@@ -25,6 +25,9 @@ import {
 import MessageModal from "./MessageModal";
 import { Messages } from "../classes/Messages";
 import Room from "./Room";
+import DialogueTree from "react-dialogue-tree";
+import "react-dialogue-tree/dist/react-dialogue-tree.css";
+
 /*global globalThis*/
 
 const style = {
@@ -51,6 +54,12 @@ function UI({ game }) {
       setShowMessage(true);
     });
   }, []);
+
+  // const dialogue = `title: Node_Title
+  // ---
+  // Here are some lines!
+  // Wow!
+  // ===`;
   const updatePageHeight = () => {
     if (map.current && bottomBarRef !== null) {
       const height = bottomBarRef.clientHeight;
@@ -71,6 +80,7 @@ function UI({ game }) {
       </div>
       {page === "inventory" && <Inventory game={game} />}
       {page === "nearme" && <Room game={game} />}
+      {/* <DialogueTree dialogue={dialogue} /> */}
       <Modal
         open={showMessage}
         onClose={() => setShowMessage(false)}
