@@ -500,7 +500,7 @@ function UI() {
         />
       </div>
       {page === "inventory" && <Inventory />}
-      {page === "nearme" && <Room />}
+      {page === "nearme" && <Room playerPlace={playerPlace} />}
       {/* <DialogueTree dialogue={dialogue} /> */}
       <Modal
         open={showMessage}

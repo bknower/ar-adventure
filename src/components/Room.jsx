@@ -21,15 +21,12 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { Aoun } from "../classes/NPCs";
 import { Person } from "./Person";
-import { useSelector, useDispatch } from "react-redux";
 
-function Room() {
-  const player = useSelector((state) => state.game.player);
-  const places = useSelector((state) => state.game.places);
-  var room = player.place;
+function Room({ playerPlace }) {
+  var room = playerPlace;
   useEffect(() => {
-    room = player.place;
-  }, [player.place]);
+    room = playerPlace;
+  }, [playerPlace]);
   const cards = [1, 2, 3, 4, 5];
   return (
     <Container component="main" style={{ overflow: "auto" }}>

@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { start, updatePlayerLocation } from "../redux/gameSlice";
 import L from "leaflet";
 
 const Map = ({ height, map, places, playerLocation }) => {
@@ -77,6 +75,7 @@ const Map = ({ height, map, places, playerLocation }) => {
     map.current.locate({ watch: true });
     map.current.on("locationfound", (e) => {
       playerMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
+      console.log("location found");
     });
     map.current.on("locationerror", (e) => {
       console.log("location error");
