@@ -9,7 +9,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import InboxIcon from "@mui/icons-material/Inbox";
 import DraftsIcon from "@mui/icons-material/Drafts";
-function Inventory({ game }) {
+function Inventory() {
   return (
     <>
       <Box sx={{ width: "100%", bgcolor: "background.paper" }}>

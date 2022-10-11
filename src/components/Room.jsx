@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Game } from "../classes/Game";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -21,9 +21,15 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { Aoun } from "../classes/NPCs";
 import { Person } from "./Person";
+import { useSelector, useDispatch } from "react-redux";
 
-function Room({ game }) {
-  var room = game.player.place;
+function Room() {
+  const player = useSelector((state) => state.game.player);
+  const places = useSelector((state) => state.game.places);
+  var room = player.place;
+  useEffect(() => {
+    room = player.place;
+  }, [player.place]);
   const cards = [1, 2, 3, 4, 5];
   return (
     <Container component="main" style={{ overflow: "auto" }}>

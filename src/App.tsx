@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./App.css";
-import { Game } from "./classes/Game";
 import Map from "./components/Map";
 import UI from "./components/UI";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -13,12 +12,11 @@ const darkTheme = createTheme({
 });
 
 function App() {
-  const game = new Game();
   return (
     <div className="App">
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
-        <UI game={game} />
+        <UI />
       </ThemeProvider>
     </div>
   );
