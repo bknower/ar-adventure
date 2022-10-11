@@ -11,10 +11,15 @@ export class Aoun extends NPC {
     {
       m: "I'm here to give you the most unfathomable dome of all time",
       cond: () => {
-        return this.timesTalkedTo > 0;
+        return this.timesTalkedTo == 1;
       },
     },
-    { m: "Are you ready?" },
+    {
+      m: "Are you ready?",
+      cond: () => {
+        return this.timesTalkedTo > 1;
+      },
+    },
   ];
   index = 0;
   constructor() {

@@ -42,7 +42,6 @@ export const Person = ({ person }) => {
       setMsg(person.getMsg());
     }
   }, [talkingTo]);
-  console.log("person", person);
   return (
     <>
       <Grid item xs={12} sm={6} md={4} paddingRight="1rem">
