@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Game } from "../classes/Game";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -36,6 +36,13 @@ const style = {
 
 export const Person = ({ person }) => {
   const [talkingTo, setTalkingTo] = useState(false);
+  const [msg, setMsg] = useState("");
+  useEffect(() => {
+    if (talkingTo) {
+      setMsg(person.getMsg());
+    }
+  }, [talkingTo]);
+  console.log("person", person);
   return (
     <>
       <Grid item xs={12} sm={6} md={4} paddingRight="1rem">
@@ -57,7 +64,9 @@ export const Person = ({ person }) => {
               </CardContent>
               <CardMedia
                 component="img"
-                image={require("../assets/people/Joseph_Aoun.jpg")}
+                // image={require("../assets/people/Joseph_Aoun.jpg")}
+                image={person.url}
+                style={{ height: "40vh", width: "100%", objectFit: "cover" }}
               />
               <CardActions>
                 <Button size="small" onClick={() => setTalkingTo(true)}>
@@ -79,7 +88,7 @@ export const Person = ({ person }) => {
             {person.name}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {person.getMsg()}
+            {msg}
           </Typography>
         </Box>
       </Modal>

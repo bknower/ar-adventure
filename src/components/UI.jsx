@@ -29,6 +29,7 @@ import { Messages } from "../classes/Messages";
 import Room from "./Room";
 import DialogueTree from "react-dialogue-tree";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
+import { Aoun, Paws } from "../classes/NPCs";
 
 /*global globalThis*/
 
@@ -48,7 +49,17 @@ const locations = [
     "ISEC",
     "It's ISEC",
     L.latLng([42.33783257291951, -71.08726143836977]),
-    () => {}
+    () => {},
+    [],
+    [
+      new Aoun(),
+      new Aoun(),
+      new Aoun(),
+      new Aoun(),
+      new Aoun(),
+      new Aoun(),
+      Paws,
+    ]
   ),
   new Place(
     "Snell Library",
@@ -455,6 +466,8 @@ function UI() {
       places[place.name] = place;
     }
 
+    // places["ISEC"].npcs.push(Aoun);
+
     var options = { timeout: 5000, enableHighAccuracy: true };
     navigator.geolocation.watchPosition((pos) => {
       const position = [pos.coords.latitude, pos.coords.longitude];
@@ -497,6 +510,9 @@ function UI() {
           map={map}
           places={places}
           playerLocation={playerLocation}
+          setPlayerLocation={setPlayerLocation}
+          playerPlace={playerPlace}
+          setPlayerPlace={setPlayerPlace}
         />
       </div>
       {page === "inventory" && <Inventory />}

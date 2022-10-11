@@ -27,7 +27,8 @@ function Room({ playerPlace }) {
   useEffect(() => {
     room = playerPlace;
   }, [playerPlace]);
-  const cards = [1, 2, 3, 4, 5];
+  const people = room.npcs;
+  const cards = [1, 2, 3];
   return (
     <Container component="main" style={{ overflow: "auto" }}>
       <Stack spacing={2}>
@@ -41,9 +42,9 @@ function Room({ playerPlace }) {
           People
         </Typography>
         <Container component="main" style={{ overflow: "auto" }}>
-          <Stack direction="row">
-            {cards.map((i) => (
-              <Person key={i} person={new Aoun()} />
+          <Stack direction="row" xs={12} sm={12} md={12}>
+            {people.map((person, i) => (
+              <Person key={i} person={person} />
             ))}
           </Stack>
         </Container>
