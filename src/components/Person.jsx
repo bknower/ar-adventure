@@ -56,6 +56,10 @@ export const Person = ({ person }) => {
     setTalkingTo(false);
     setInputting(false);
   };
+  const submit = () => {
+    msg.input(answer);
+    onClose();
+  };
   return (
     <>
       <Grid item xs={12} sm={6} md={4} paddingRight="1rem">
@@ -111,18 +115,22 @@ export const Person = ({ person }) => {
                 variant="outlined"
                 onChange={(e) => setAnswer(e.target.value)}
                 fullWidth
+                onKeyPress={(ev) => {
+                  console.log(`Pressed keyCode ${ev.key}`);
+                  if (ev.key === "Enter") {
+                    submit();
+                    ev.preventDefault();
+                  }
+                }}
               >
                 {answer}
               </TextField>
               <Button
-                type="button"
+                type="submit"
                 fullWidth
                 variant="contained"
                 color="primary"
-                onClick={() => {
-                  msg.input(answer);
-                  onClose();
-                }}
+                onClick={submit}
               >
                 Answer
               </Button>
