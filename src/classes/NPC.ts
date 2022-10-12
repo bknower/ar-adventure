@@ -2,6 +2,7 @@ type Message = {
   m: string;
   cond?: () => boolean;
   effect?: () => void;
+  input?: (response: string) => void;
 };
 
 export class NPC {
@@ -28,18 +29,12 @@ export class NPC {
       for (var i = 1; i < this.messages.length; i++) {
         const msg = this.messages[i];
         if (msg["cond"] && msg["cond"]()) {
-          if (msg["effect"]) {
-            msg["effect"]();
-          }
           this.timesTalkedTo += 1;
-          return msg["m"];
+          return msg;
         }
       }
     }
-    if (this.messages[0]["effect"]) {
-      this.messages[0]["effect"]();
-    }
     this.timesTalkedTo += 1;
-    return this.messages[0]["m"];
+    return this.messages[0];
   }
 }

@@ -21,7 +21,7 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { CardMedia } from "@mui/material";
 import Modal from "@mui/material/Modal";
-
+import { TextField } from "@mui/material";
 const style = {
   position: "absolute",
   top: "50%",
@@ -36,12 +36,26 @@ const style = {
 
 export const Person = ({ person }) => {
   const [talkingTo, setTalkingTo] = useState(false);
+  const [inputting, setInputting] = useState(false);
+  const [answer, setAnswer] = useState("");
   const [msg, setMsg] = useState("");
   useEffect(() => {
     if (talkingTo) {
-      setMsg(person.getMsg());
+      const msg = person.getMsg();
+      const { m, effect, input } = msg;
+      if (effect) {
+        effect();
+      }
+      if (input) {
+        setInputting(true);
+      }
+      setMsg(msg);
     }
   }, [talkingTo]);
+  const onClose = () => {
+    setTalkingTo(false);
+    setInputting(false);
+  };
   return (
     <>
       <Grid item xs={12} sm={6} md={4} paddingRight="1rem">
@@ -78,7 +92,7 @@ export const Person = ({ person }) => {
       </Grid>
       <Modal
         open={talkingTo}
-        onClose={() => setTalkingTo(false)}
+        onClose={onClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -87,8 +101,33 @@ export const Person = ({ person }) => {
             {person.name}
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {msg}
+            {msg.m}
           </Typography>
+          {inputting && (
+            <>
+              <TextField
+                id="outlined-basic"
+                label="Answer"
+                variant="outlined"
+                onChange={(e) => setAnswer(e.target.value)}
+                fullWidth
+              >
+                {answer}
+              </TextField>
+              <Button
+                type="button"
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  msg.input(answer);
+                  onClose();
+                }}
+              >
+                Answer
+              </Button>
+            </>
+          )}
         </Box>
       </Modal>
     </>
