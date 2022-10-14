@@ -90,6 +90,7 @@ function UI() {
           place.location !== null &&
           place.location.distanceTo(playerLocation) < maxDistance
         ) {
+          console.log("set player place to", place.name);
           setPlayerPlace(place);
         }
       });

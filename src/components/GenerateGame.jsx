@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 // import { RestoreIcon, FavoriteIcon, LocationOnIcon } from "@mui/icons-material";
 import BookIcon from "@mui/icons-material/LibraryBooks";
@@ -41,6 +41,58 @@ export const GenerateGameState = ({
   playerLocation,
   setPlayerLocation,
 }) => {
+  const addToInventory = useCallback(
+    (item) => {
+      setInventory((inv) => [...inv, item]);
+      return item;
+    },
+    [setInventory]
+  );
+  const removeFromInventory = useCallback(
+    (item) => {
+      setInventory((inv) => inv.filter((i) => i !== item));
+      return item;
+    },
+    [setInventory]
+  );
+
+  const addToPlace = useCallback(
+    (item) => {
+      setPlaces((places) => {
+        return {
+          ...places,
+          [playerPlace.name]: {
+            ...playerPlace,
+            items: [...playerPlace.items, item],
+          },
+        };
+      });
+      return item;
+    },
+    [setPlaces, playerPlace]
+  );
+
+  const removeFromPlace = useCallback(
+    (item) => {
+      setPlaces((places) => {
+        console.log(
+          "places is",
+          places,
+          playerPlace.name,
+          item,
+          places[playerPlace.name]
+        );
+        const newPlace = { ...places[playerPlace.name] };
+        console.log("newPlace is", newPlace);
+        newPlace.items = newPlace.items.filter((i) => i !== item);
+        const newPlaces = [...places];
+        newPlaces[playerPlace.name] = newPlace;
+        return newPlaces;
+      });
+      return item;
+    },
+    [setPlaces, playerPlace]
+  );
   const locations = [
     new Place(
       "Snell Library",
@@ -460,27 +512,75 @@ export const GenerateGameState = ({
     [{ m: "I hate you" }]
   );
 
-  const Sword = new Item("Sword", "A sword", {
+  class Droppable extends Item {
+    dropped;
+    constructor(
+      name,
+      description,
+      actions = {},
+      dropped = true,
+      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
+    ) {
+      super(name, description, actions, url);
+      this.dropped = dropped;
+      const drop = () => {
+        addToPlace(removeFromInventory(this));
+        this.dropped = true;
+        this.actions["pick up"] = pickUp;
+        delete this.actions["drop"];
+      };
+      const pickUp = () => {
+        addToInventory(removeFromPlace(this));
+        this.dropped = false;
+        this.actions["drop"] = drop;
+        delete this.actions["pick up"];
+      };
+      if (dropped) {
+        this.actions["pick up"] = pickUp;
+      } else {
+        this.actions["drop"] = drop;
+      }
+    }
+  }
+
+  class Shield extends Droppable {
+    constructor(dropped) {
+      super(
+        "Shield",
+        "A shield",
+        {
+          defend: () => {
+            addToInventory(new Shield(false));
+          },
+          attack: () => {
+            console.log("You bash the enemy with your shield!");
+          },
+        },
+        dropped
+      );
+    }
+  }
+  const Sword = new Droppable("Sword", "A sword", {
     attack: () => {
       console.log("You swing your sword at the enemy!");
     },
   });
 
-  const Shield = new Item("Shield", "A shield", {
-    defend: () => {
-      setInventory((inv) => [...inv, Shield]);
-    },
-    attack: () => {
-      console.log("You bash the enemy with your shield!");
-    },
-  });
+  // const Shield = new Droppable("Shield", "A shield", {
+  //   defend: () => {
+  //     Shield.actions["pick up"]();
+  //   },
+  //   attack: () => {
+  //     console.log("You bash the enemy with your shield!");
+  //   },
+  // });
 
   const ISEC = new Place(
     "ISEC",
     "It's ISEC",
     L.latLng([42.33783257291951, -71.08726143836977]),
     () => {},
-    [Sword, Shield],
+    [Sword, new Shield()],
     [new Aoun(), Paws]
   );
 

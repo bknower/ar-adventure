@@ -11,5 +11,6 @@ export class Item extends Entity {
     super(name, description);
     this.url = url;
     this.actions = actions;
+    // this.actions["drop"] = () => {};
   }
 }

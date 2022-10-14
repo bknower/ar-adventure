@@ -70,6 +70,7 @@ const Map = ({
             nearestDistance.toFixed(2) +
             " meters)"
         );
+        console.log("set player place to " + nearestPlace.name);
         setPlayerPlace(nearestPlace);
       }
     });
