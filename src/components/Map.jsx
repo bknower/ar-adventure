@@ -87,7 +87,6 @@ const Map = ({
     map.current.on("locationfound", (e) => {
       playerMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
       setPlayerLocation([e.latlng.lat, e.latlng.lng]);
-      console.log("location found");
     });
     map.current.on("locationerror", (e) => {
       console.log("location error");

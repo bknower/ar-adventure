@@ -4,6 +4,7 @@ import Map from "./components/Map";
 import UI from "./components/UI";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
+import Test from "./components/Test";
 
 const darkTheme = createTheme({
   palette: {
@@ -17,6 +18,7 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
         <UI />
+        {/* <Test /> */}
       </ThemeProvider>
     </div>
   );

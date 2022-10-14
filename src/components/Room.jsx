@@ -25,20 +25,22 @@ import { Person } from "./Person";
 import { ItemList } from "./ItemList";
 
 function Room({ playerPlace }) {
-  var room = playerPlace;
+  const [refresh, setRefresh] = useState(true);
+
   useEffect(() => {
-    room = playerPlace;
+    setRefresh(!refresh);
+    console.log("playerPlace changed", playerPlace);
   }, [playerPlace]);
-  const people = room.npcs;
+  const people = playerPlace.npcs;
   const cards = [1, 2, 3];
   return (
     <Container component="main" style={{ overflow: "auto" }}>
       <Stack spacing={2}>
         <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
           <Typography variant="h2" component="h1" gutterBottom>
-            {room.name}
+            {playerPlace.name}
           </Typography>
-          <Typography variant="body1">{room.description}</Typography>
+          <Typography variant="body1">{playerPlace.description}</Typography>
         </Container>
         <Typography variant="h4" component="h1" gutterBottom>
           People
@@ -54,7 +56,7 @@ function Room({ playerPlace }) {
         <Typography variant="h4" component="h1" gutterBottom>
           Items
         </Typography>
-        <ItemList items={room.items} />
+        <ItemList items={playerPlace.items} />
         <br />
         <br />
         <br />

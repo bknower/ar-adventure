@@ -1,4 +1,11 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 // import { RestoreIcon, FavoriteIcon, LocationOnIcon } from "@mui/icons-material";
 import BookIcon from "@mui/icons-material/LibraryBooks";
@@ -13,9 +20,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import NearMeIcon from "@mui/icons-material/NearMe";
-import { Place } from "../classes/Place";
-import { NPC } from "../classes/NPC";
-import { Item } from "../classes/Item";
+// import { Place } from "../classes/Place";
+// import { NPC } from "../classes/NPC";
+// import { Item } from "../classes/Item";
 
 import {
   MapContainer,
@@ -28,9 +35,17 @@ import {
 import MessageModal from "./MessageModal";
 import { Messages } from "../classes/Messages";
 import Room from "./Room";
-import DialogueTree from "react-dialogue-tree";
-import "react-dialogue-tree/dist/react-dialogue-tree.css";
 
+interface GameState {
+  places: any;
+  setPlaces: any;
+  inventory: any;
+  setInventory: any;
+  playerPlace: any;
+  setPlayerPlace: any;
+  playerLocation: any;
+  setPlayerLocation: any;
+}
 export const GenerateGameState = ({
   places,
   setPlaces,
@@ -40,25 +55,137 @@ export const GenerateGameState = ({
   setPlayerPlace,
   playerLocation,
   setPlayerLocation,
-}) => {
+}: GameState) => {
+  useEffect(() => {});
+  abstract class Entity {
+    name: string;
+    description: string;
+    actions: { [key: string]: (...args: any[]) => any } = {};
+    constructor(name: string, description: string) {
+      this.name = name;
+      this.description = description;
+    }
+
+    act(verb: string): void {
+      if (this.actions[verb]) {
+        this.actions[verb]();
+      } else {
+        console.log(`${this.name} doesn't know how to ${verb}.`);
+      }
+    }
+  }
+
+  class Item extends Entity {
+    inInventory: boolean = false;
+    url: string;
+    constructor(
+      name: string,
+      description: string,
+      actions = {},
+      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
+    ) {
+      super(name, description);
+      this.url = url;
+      this.actions = actions;
+      const drop = () => {
+        addToPlace(removeFromInventory(this));
+        this.inInventory = false;
+        this.actions["pick up"] = pickUp;
+        delete this.actions["drop"];
+      };
+      const pickUp = () => {
+        addToInventory(removeFromPlace(this));
+        this.inInventory = true;
+        this.actions["drop"] = drop;
+        delete this.actions["pick up"];
+      };
+      if (this.inInventory) {
+        this.actions["drop"] = drop;
+      } else {
+        this.actions["pick up"] = pickUp;
+      }
+    }
+  }
+  type Message = {
+    m: string;
+    cond?: () => boolean;
+    effect?: () => void;
+    input?: (response: string) => void;
+  };
+
+  class NPC {
+    name: string;
+    description: string;
+    messages: Message[];
+    url: string;
+    timesTalkedTo = 0;
+    constructor(
+      name: string,
+      description: string,
+      url = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png",
+      messages: Message[] = []
+    ) {
+      this.name = name;
+      this.description = description;
+      this.messages = messages;
+      this.url = url;
+    }
+
+    getMsg() {
+      console.log(this.messages);
+      if (this.messages.length > 1) {
+        for (var i = 1; i < this.messages.length; i++) {
+          const msg = this.messages[i];
+          if (msg["cond"] && msg["cond"]()) {
+            this.timesTalkedTo += 1;
+            return msg;
+          }
+        }
+      }
+      this.timesTalkedTo += 1;
+      return this.messages[0];
+    }
+  }
+
+  class Place extends Entity {
+    items: Item[];
+    npcs: NPC[];
+    location: LatLng | null;
+    onEnter: (...args: any[]) => any = () => {};
+    constructor(
+      name: string,
+      description: string,
+      location?: LatLng,
+      onEnter: (...args: any[]) => any = () => {},
+      items: Item[] = [],
+      npcs: NPC[] = []
+    ) {
+      super(name, description);
+      this.items = items;
+      this.npcs = npcs;
+      this.location = location ? location : null;
+      this.onEnter = onEnter;
+    }
+  }
+
   const addToInventory = useCallback(
-    (item) => {
-      setInventory((inv) => [...inv, item]);
+    (item: Item) => {
+      setInventory((inv: Item[]) => [...inv, item]);
       return item;
     },
     [setInventory]
   );
   const removeFromInventory = useCallback(
-    (item) => {
-      setInventory((inv) => inv.filter((i) => i !== item));
+    (item: Item) => {
+      setInventory((inv: Item[]) => inv.filter((i) => i !== item));
       return item;
     },
     [setInventory]
   );
 
   const addToPlace = useCallback(
-    (item) => {
-      setPlaces((places) => {
+    (item: Item) => {
+      setPlaces((places: any) => {
         return {
           ...places,
           [playerPlace.name]: {
@@ -73,8 +200,8 @@ export const GenerateGameState = ({
   );
 
   const removeFromPlace = useCallback(
-    (item) => {
-      setPlaces((places) => {
+    (item: Item) => {
+      setPlaces((places: any) => {
         console.log(
           "places is",
           places,
@@ -83,8 +210,11 @@ export const GenerateGameState = ({
           places[playerPlace.name]
         );
         const newPlace = { ...places[playerPlace.name] };
-        console.log("newPlace is", newPlace);
-        newPlace.items = newPlace.items.filter((i) => i !== item);
+        console.log("newPlace iss", newPlace);
+        newPlace.items = newPlace.items.filter((i: Item) => {
+          console.log("i is", i, "item is", item);
+          return i !== item;
+        });
         const newPlaces = [...places];
         newPlaces[playerPlace.name] = newPlace;
         return newPlaces;
@@ -467,7 +597,7 @@ export const GenerateGameState = ({
       () => {}
     ),
   ];
-  const tempPlaces = [];
+  const tempPlaces: Place[] = [];
 
   class Aoun extends NPC {
     ready = false;
@@ -488,7 +618,7 @@ export const GenerateGameState = ({
       {
         m: "Are you ready?",
         cond: () => this.timesTalkedTo > 1,
-        input: (answer) => {
+        input: (answer: string) => {
           console.log("answer", answer);
           if (answer === "yes") {
             this.ready = true;
@@ -512,55 +642,50 @@ export const GenerateGameState = ({
     [{ m: "I hate you" }]
   );
 
-  class Droppable extends Item {
-    dropped;
-    constructor(
-      name,
-      description,
-      actions = {},
-      dropped = true,
-      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
-    ) {
-      super(name, description, actions, url);
-      this.dropped = dropped;
-      const drop = () => {
-        addToPlace(removeFromInventory(this));
-        this.dropped = true;
-        this.actions["pick up"] = pickUp;
-        delete this.actions["drop"];
-      };
-      const pickUp = () => {
-        addToInventory(removeFromPlace(this));
-        this.dropped = false;
-        this.actions["drop"] = drop;
-        delete this.actions["pick up"];
-      };
-      if (dropped) {
-        this.actions["pick up"] = pickUp;
-      } else {
-        this.actions["drop"] = drop;
-      }
-    }
-  }
+  // class Droppable extends Item {
+  //   dropped;
+  //   constructor(
+  //     name: string,
+  //     description,
+  //     actions = {},
+  //     dropped = true,
+  //     url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
+  //   ) {
+  //     super(name, description, actions, url);
+  //     this.dropped = dropped;
+  //     const drop = () => {
+  //       addToPlace(removeFromInventory(this));
+  //       this.dropped = true;
+  //       this.actions["pick up"] = pickUp;
+  //       delete this.actions["drop"];
+  //     };
+  //     const pickUp = () => {
+  //       addToInventory(removeFromPlace(this));
+  //       this.dropped = false;
+  //       this.actions["drop"] = drop;
+  //       delete this.actions["pick up"];
+  //     };
+  //     if (dropped) {
+  //       this.actions["pick up"] = pickUp;
+  //     } else {
+  //       this.actions["drop"] = drop;
+  //     }
+  //   }
+  // }
 
-  class Shield extends Droppable {
-    constructor(dropped) {
-      super(
-        "Shield",
-        "A shield",
-        {
-          defend: () => {
-            addToInventory(new Shield(false));
-          },
-          attack: () => {
-            console.log("You bash the enemy with your shield!");
-          },
+  class Shield extends Item {
+    constructor() {
+      super("Shield", "A shield", {
+        defend: () => {
+          addToInventory(new Shield());
         },
-        dropped
-      );
+        attack: () => {
+          console.log("You bash the enemy with your shield!");
+        },
+      });
     }
   }
-  const Sword = new Droppable("Sword", "A sword", {
+  const Sword = new Item("Sword", "A sword", {
     attack: () => {
       console.log("You swing your sword at the enemy!");
     },

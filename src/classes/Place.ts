@@ -12,7 +12,7 @@ export class Place extends Entity {
     name: string,
     description: string,
     location?: LatLng,
-    onEnter?: (...args: any[]) => any,
+    onEnter: (...args: any[]) => any = () => {},
     items: Item[] = [],
     npcs: NPC[] = []
   ) {
@@ -20,8 +20,6 @@ export class Place extends Entity {
     this.items = items;
     this.npcs = npcs;
     this.location = location ? location : null;
-    if (onEnter) {
-      this.onEnter = onEnter;
-    }
+    this.onEnter = onEnter;
   }
 }
