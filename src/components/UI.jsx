@@ -73,7 +73,6 @@ function UI() {
   const [inventory, setInventory] = useState([]);
   const [playerPlace, setPlayerPlace] = useState(outside);
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
-
   const addToInventory = (item) => {
     setInventory((inv) => [...inv, item]);
     return item;
@@ -84,38 +83,36 @@ function UI() {
   };
 
   const addToPlace = (item) => {
-    setPlaces((places) => {
-      return {
-        ...places,
-        [playerPlace.name]: {
-          ...playerPlace,
-          items: [...playerPlace.items, item],
-        },
-      };
+    var newPlace;
+    setPlayerPlace((playerPlace) => {
+      setPlaces((places) => {
+        newPlace = { ...places[playerPlace.name] };
+        newPlace.items = [...newPlace.items, item];
+
+        const newPlaces = { ...places };
+        newPlaces[playerPlace.name] = newPlace;
+        return newPlaces;
+      });
+      return newPlace;
     });
     return item;
   };
 
   const removeFromPlace = (item) => {
-    setPlaces((places) => {
-      console.log(
-        "places is",
-        places,
-        playerPlace.name,
-        item,
-        places[playerPlace.name]
-      );
-      const newPlace = { ...places[playerPlace.name] };
-      setPlayerPlace(newPlace);
-      console.log("newPlace is", newPlace);
-      newPlace.items = newPlace.items.filter((i) => {
-        return i !== item;
+    setPlayerPlace((playerPlace) => {
+      var newPlace;
+      setPlaces((places) => {
+        newPlace = { ...places[playerPlace.name] };
+        newPlace.items = newPlace.items.filter((i) => {
+          return i !== item;
+        });
+        const newPlaces = { ...places };
+        newPlaces[playerPlace.name] = newPlace;
+        return newPlaces;
       });
-      const newPlaces = { ...places };
-      newPlaces[playerPlace.name] = newPlace;
-      console.log("newPlaces is", newPlaces);
-      return newPlaces;
+      return newPlace;
     });
+
     return item;
   };
   const locations = [
@@ -559,7 +556,6 @@ function UI() {
         delete this.actions["drop"];
       };
       const pickUp = () => {
-        console.log("picking up at", playerPlace.name);
         addToInventory(removeFromPlace(this));
         this.dropped = false;
         this.actions["drop"] = drop;
@@ -624,14 +620,14 @@ function UI() {
 
   const [lastPlayerPlace, setLastPlayerPlace] = useState(outside);
 
-  useEffect(() => {
-    // removeFromPlace(Sword);
-    console.log("place changed to", playerPlace.name);
-    if (playerPlace.name === "ISEC" && lastPlayerPlace.name !== "ISEC") {
-      removeFromPlace(playerPlace.items[0]);
-    }
-    setLastPlayerPlace(playerPlace);
-  }, [playerPlace]);
+  // useEffect(() => {
+  //   // removeFromPlace(Sword);
+  //   console.log("place changed to", playerPlace.name);
+  //   if (playerPlace.name === "ISEC" && lastPlayerPlace.name !== "ISEC") {
+  //     //removeFromPlace(playerPlace.items[0]);
+  //   }
+  //   setLastPlayerPlace(playerPlace);
+  // }, [playerPlace]);
 
   useEffect(() => {
     tempPlaces.push(ISEC);
