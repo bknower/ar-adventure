@@ -80,7 +80,6 @@ const Map = ({
       L.marker(location).bindTooltip(name).addTo(map.current);
     }
 
-    console.log("added marker initially");
     playerMarker.addTo(map.current);
     playerMarker.setLatLng([42.344232250493214, -71.09175682067873]);
     map.current.locate({ watch: true });
@@ -88,11 +87,9 @@ const Map = ({
       playerMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
       setPlayerLocation([e.latlng.lat, e.latlng.lng]);
     });
-    map.current.on("locationerror", (e) => {
-      console.log("location error");
-    });
-
-    console.log(map);
+    // map.current.on("locationerror", (e) => {
+    //   console.log("location error");
+    // });
   }
 
   return <div id="map" style={{ height: height }}></div>;

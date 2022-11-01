@@ -127,6 +127,12 @@ function UI() {
       () => {}
     ),
     new Place(
+      "Koi Pond",
+      "",
+      L.latLng([42.338911126796155, -71.08705759048463]),
+      () => {}
+    ),
+    new Place(
       "Cy Young Statue",
       "",
       L.latLng([42.33893888345322, -71.08910143375398]),
@@ -202,6 +208,18 @@ function UI() {
       "Smolly's",
       "",
       L.latLng([42.33730518506171, -71.09216988086702]),
+      () => {}
+    ),
+    new Place(
+      "IV",
+      "",
+      L.latLng([42.33551679180333, -71.08902096748353]),
+      () => {}
+    ),
+    new Place(
+      "ISEC",
+      "It's ISEC",
+      L.latLng([42.33783257291951, -71.08726143836977]),
       () => {}
     ),
     new Place(
@@ -530,20 +548,14 @@ function UI() {
   const [lastPlayerPlace, setLastPlayerPlace] = useState(outside);
 
   useEffect(() => {
-    // tempPlaces.push(ISEC);
-    // tempPlaces.push(IV);
-    // tempPlaces.push(...locations);
-    // for (let place of tempPlaces) {
-    //   places[place.name] = place;
-    // }
+    for (let place of locations) {
+      places[place.name] = place;
+    }
     setPage("nearme");
 
     globalThis.log = new Messages(() => {
       setShowMessage(true);
     });
-
-    // places["ISEC"].npcs.push(Aoun);
-
     var options = { timeout: 5000, enableHighAccuracy: true };
     navigator.geolocation.watchPosition((pos) => {
       const position = [pos.coords.latitude, pos.coords.longitude];
@@ -563,21 +575,13 @@ function UI() {
   }, []);
 
   useEffect(() => {
-    for (let place of locations) {
-      places[place.name] = place;
-    }
     for (const [name, place] of Object.entries(tempPlaces)) {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace(places["ISEC"]);
+    setPlayerPlace(places["IV"]);
   }, [initialized]);
 
-  // const dialogue = `title: Node_Title
-  // ---
-  // Here are some lines!
-  // Wow!
-  // ===`;
   const updatePageHeight = () => {
     if (map.current && bottomBarRef !== null) {
       const height = bottomBarRef.clientHeight;
@@ -604,22 +608,12 @@ function UI() {
         setPlayerLocation,
         Droppable,
         tempPlaces,
+        addToInventory,
+        removeFromInventory,
+        addToPlace,
+        removeFromPlace,
         children: [Pisces],
       })}
-      {/* <QuestWrapper
-        places={places}
-        setPlaces={setPlaces}
-        inventory={inventory}
-        setInventory={setInventory}
-        playerPlace={playerPlace}
-        setPlayerPlace={setPlayerPlace}
-        playerLocation={playerLocation}
-        setPlayerLocation={setPlayerLocation}
-        Droppable={Droppable}
-        tempPlaces={tempPlaces}
-      >
-        <Pisces />
-      </QuestWrapper> */}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map
           height={pageHeight}

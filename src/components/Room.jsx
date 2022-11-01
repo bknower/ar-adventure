@@ -29,7 +29,6 @@ function Room({ playerPlace }) {
 
   useEffect(() => {
     setRefresh(!refresh);
-    console.log("playerPlace changed", playerPlace);
   }, [playerPlace]);
   const people = playerPlace.npcs;
   const cards = [1, 2, 3];

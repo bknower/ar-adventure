@@ -45,36 +45,6 @@ import { Aoun, Paws } from "../classes/NPCs";
 import { Shield, Sword } from "../classes/Items";
 import { GenerateGameState } from "./GenerateGame";
 
-export function QuestWrapper({
-  children,
-  places,
-  setPlaces,
-  inventory,
-  setInventory,
-  playerPlace,
-  setPlayerPlace,
-  playerLocation,
-  setPlayerLocation,
-  Droppable,
-  tempPlaces,
-}) {
-  console.log("children", children);
-  return (
-    <>
-      {children.map((child) =>
-        child({
-          places,
-          setPlaces,
-          inventory,
-          setInventory,
-          playerPlace,
-          setPlayerPlace,
-          playerLocation,
-          setPlayerLocation,
-          Droppable,
-          tempPlaces,
-        })
-      )}
-    </>
-  );
+export function QuestWrapper(props) {
+  return <>{props.children.map((child) => child({ ...props }))}</>;
 }
