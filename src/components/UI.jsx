@@ -37,6 +37,8 @@ import "react-dialogue-tree/dist/react-dialogue-tree.css";
 import { Aoun, Paws } from "../classes/NPCs";
 import { Shield, Sword } from "../classes/Items";
 import { GenerateGameState } from "./GenerateGame";
+import { Pisces } from "./Pisces";
+import { QuestWrapper } from "./QuestWrapper";
 
 /*global globalThis*/
 
@@ -73,6 +75,8 @@ function UI() {
   const [inventory, setInventory] = useState([]);
   const [playerPlace, setPlayerPlace] = useState(outside);
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
+
+  const [initialized, setInitialized] = useState(false);
   const addToInventory = (item) => {
     setInventory((inv) => [...inv, item]);
     return item;
@@ -320,18 +324,7 @@ function UI() {
       L.latLng([42.33920058847468, -71.08866691589357]),
       () => {}
     ),
-    new Place(
-      "Koi Pond",
-      "",
-      L.latLng([42.338911126796155, -71.08705759048463]),
-      () => {}
-    ),
-    new Place(
-      "IV",
-      "",
-      L.latLng([42.33551679180333, -71.08902096748353]),
-      () => {}
-    ),
+
     new Place(
       "West A",
       "",
@@ -491,49 +484,6 @@ function UI() {
   ];
   const tempPlaces = [];
 
-  class Aoun extends NPC {
-    ready = false;
-    messages = [
-      {
-        m: "I am Joseph Aoun",
-      },
-      {
-        m: "I'm here to give you the most unfathomable dome of all time",
-        cond: () => {
-          return this.timesTalkedTo === 1;
-        },
-      },
-      {
-        m: "**loud slurping sounds**",
-        cond: () => this.ready,
-      },
-      {
-        m: "Are you ready?",
-        cond: () => this.timesTalkedTo > 1,
-        input: (answer) => {
-          console.log("answer", answer);
-          if (answer === "yes") {
-            this.ready = true;
-          }
-        },
-      },
-    ];
-    constructor() {
-      super(
-        "Aoun",
-        "Aoun is our daddy.",
-        "https://upload.wikimedia.org/wikipedia/commons/8/88/Joseph_Aoun_%282897155178%29_%28cropped%29.jpg"
-      );
-    }
-  }
-
-  const Paws = new NPC(
-    "Paws",
-    "A big old husky",
-    "https://upload.wikimedia.org/wikipedia/commons/6/6a/Paws%2C_Northeastern_Mascot.jpg",
-    [{ m: "I hate you" }]
-  );
-
   class DroppableI extends Item {
     dropped;
     constructor(
@@ -577,66 +527,16 @@ function UI() {
     removeFromPlace
   );
 
-  class Shield extends Droppable {
-    constructor(dropped) {
-      super(
-        "Shield",
-        "A shield",
-        {
-          defend: () => {
-            addToInventory(new Shield(false));
-          },
-          attack: () => {
-            console.log("You bash the enemy with your shield!");
-          },
-        },
-        dropped
-      );
-    }
-  }
-  const Sword = new Droppable("Sword", "A sword", {
-    attack: () => {
-      console.log("You swing your sword at the enemy!");
-    },
-  });
-
-  // const Shield = new Droppable("Shield", "A shield", {
-  //   defend: () => {
-  //     Shield.actions["pick up"]();
-  //   },
-  //   attack: () => {
-  //     console.log("You bash the enemy with your shield!");
-  //   },
-  // });
-
-  const ISEC = new Place(
-    "ISEC",
-    "It's ISEC",
-    L.latLng([42.33783257291951, -71.08726143836977]),
-    () => {},
-    [Sword, new Shield()],
-    [new Aoun(), Paws]
-  );
-
   const [lastPlayerPlace, setLastPlayerPlace] = useState(outside);
 
-  // useEffect(() => {
-  //   // removeFromPlace(Sword);
-  //   console.log("place changed to", playerPlace.name);
-  //   if (playerPlace.name === "ISEC" && lastPlayerPlace.name !== "ISEC") {
-  //     //removeFromPlace(playerPlace.items[0]);
-  //   }
-  //   setLastPlayerPlace(playerPlace);
-  // }, [playerPlace]);
-
   useEffect(() => {
-    tempPlaces.push(ISEC);
-    tempPlaces.push(...locations);
-    for (let place of tempPlaces) {
-      places[place.name] = place;
-    }
+    // tempPlaces.push(ISEC);
+    // tempPlaces.push(IV);
+    // tempPlaces.push(...locations);
+    // for (let place of tempPlaces) {
+    //   places[place.name] = place;
+    // }
     setPage("nearme");
-    setPlayerPlace(ISEC);
 
     globalThis.log = new Messages(() => {
       setShowMessage(true);
@@ -659,7 +559,19 @@ function UI() {
         }
       });
     }, errorHandler);
+    setInitialized(true);
   }, []);
+
+  useEffect(() => {
+    for (let place of locations) {
+      places[place.name] = place;
+    }
+    for (const [name, place] of Object.entries(tempPlaces)) {
+      places[name] = place;
+    }
+    setPlaces((places) => ({ ...places }));
+    setPlayerPlace(places["ISEC"]);
+  }, [initialized]);
 
   // const dialogue = `title: Node_Title
   // ---
@@ -681,7 +593,7 @@ function UI() {
 
   return (
     <>
-      {/* {GenerateGameState({
+      {QuestWrapper({
         places,
         setPlaces,
         inventory,
@@ -690,7 +602,24 @@ function UI() {
         setPlayerPlace,
         playerLocation,
         setPlayerLocation,
-      })} */}
+        Droppable,
+        tempPlaces,
+        children: [Pisces],
+      })}
+      {/* <QuestWrapper
+        places={places}
+        setPlaces={setPlaces}
+        inventory={inventory}
+        setInventory={setInventory}
+        playerPlace={playerPlace}
+        setPlayerPlace={setPlayerPlace}
+        playerLocation={playerLocation}
+        setPlayerLocation={setPlayerLocation}
+        Droppable={Droppable}
+        tempPlaces={tempPlaces}
+      >
+        <Pisces />
+      </QuestWrapper> */}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map
           height={pageHeight}
