@@ -20,23 +20,23 @@ export function Pisces({
   addToPlace,
   removeFromPlace,
 }) {
-  class Shield extends Droppable {
-    constructor(dropped) {
-      super(
-        "Shield",
-        "A shield",
-        {
-          defend: () => {
-            addToInventory(new Shield(false));
-          },
-          attack: () => {
-            console.log("You bash the enemy with your shield!");
-          },
-        },
-        dropped
-      );
-    }
-  }
+  //   class Shield extends Droppable {
+  //     constructor(dropped) {
+  //       super(
+  //         "Shield",
+  //         "A shield",
+  //         {
+  //           defend: () => {
+  //             addToInventory(new Shield(false));
+  //           },
+  //           attack: () => {
+  //             console.log("You bash the enemy with your shield!");
+  //           },
+  //         },
+  //         dropped
+  //       );
+  //     }
+  //   }
   const Sword = new Droppable("Sword", "A sword", {
     attack: () => {
       console.log("You swing your sword at the enemy!");
@@ -137,7 +137,7 @@ export function Pisces({
 
     places.ISEC = {
       ...places.ISEC,
-      items: [Sword, new Shield()],
+      items: [Sword],
       npcs: [new Aoun(), Paws],
     };
   }, []);
