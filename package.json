@@ -27,8 +27,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@types/leaflet": "^1.7.11"
+    "@types/leaflet": "^1.7.11",
+    "react-app-rewired": "^2.2.1"
   }
 }
