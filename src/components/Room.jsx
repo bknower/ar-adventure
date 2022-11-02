@@ -30,7 +30,6 @@ function Room({ playerPlace }) {
   useEffect(() => {
     setRefresh(!refresh);
   }, [playerPlace]);
-  const people = playerPlace.npcs;
   const cards = [1, 2, 3];
   return (
     <Container component="main" style={{ overflow: "auto" }}>
@@ -41,14 +40,14 @@ function Room({ playerPlace }) {
           </Typography>
           <Typography variant="body1">{playerPlace.description}</Typography>
         </Container>
-        {people.length > 0 && (
+        {playerPlace.npcs.length > 0 && (
           <>
             <Typography variant="h4" component="h1" gutterBottom>
               People
             </Typography>
             <Container component="main" style={{ overflow: "auto" }}>
               <Stack direction="row" xs={12} sm={12} md={12}>
-                {people.map((person, i) => (
+                {playerPlace.npcs.map((person, i) => (
                   <Person key={i} person={person} />
                 ))}
               </Stack>
