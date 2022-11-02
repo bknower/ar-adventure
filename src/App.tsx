@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import Map from "./components/Map";
-import UI from "./components/UI";
+import UI from "./components/UI.jsx";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import Test from "./components/Test";
