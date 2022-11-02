@@ -42,7 +42,6 @@ import Room from "./Room";
 import DialogueTree from "react-dialogue-tree";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
 import { Aoun, Paws } from "../classes/NPCs";
-import { Shield, Sword } from "../classes/Items";
 import { Pisces } from "./quests/Pisces";
 import { QuestWrapper } from "./QuestWrapper";
 import { Gemini } from "./quests/Gemini";
@@ -563,6 +562,24 @@ function UI() {
     removeFromPlace
   );
 
+  class Shield extends Droppable {
+    constructor(dropped) {
+      super(
+        "Shield",
+        "A shield",
+        {
+          defend: () => {
+            addToInventory(new Shield(false));
+          },
+          attack: () => {
+            console.log("You bash the enemy with your shield!");
+          },
+        },
+        dropped
+      );
+    }
+  }
+
   const [lastPlayerPlace, setLastPlayerPlace] = useState(outside);
 
   useEffect(() => {
@@ -599,6 +616,7 @@ function UI() {
   }, []);
 
   useEffect(() => {
+    places["ISEC"].items.push(new Shield(true));
     for (const [name, place] of Object.entries(tempPlaces)) {
       places[name] = place;
     }
