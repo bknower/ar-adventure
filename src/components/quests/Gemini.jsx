@@ -21,48 +21,48 @@ export function Gemini({
   addToPlace,
   removeFromPlace,
 }) {
-  class DroppableI extends Item {
-    dropped;
-    constructor(
-      addToInventory,
-      addToPlace,
-      removeFromInventory,
-      removeFromPlace,
-      name,
-      description,
-      actions = {},
-      dropped = true,
-      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
-    ) {
-      super(name, description, actions, url);
-      this.dropped = dropped;
-      const drop = () => {
-        addToPlace(removeFromInventory(this));
-        this.dropped = true;
-        this.actions["pick up"] = pickUp;
-        delete this.actions["drop"];
-      };
-      const pickUp = () => {
-        addToInventory(removeFromPlace(this));
-        this.dropped = false;
-        this.actions["drop"] = drop;
-        delete this.actions["pick up"];
-      };
-      if (dropped) {
-        this.actions["pick up"] = pickUp;
-      } else {
-        this.actions["drop"] = drop;
-      }
-    }
-  }
+  // class DroppableI extends Item {
+  //   dropped;
+  //   constructor(
+  //     addToInventory,
+  //     addToPlace,
+  //     removeFromInventory,
+  //     removeFromPlace,
+  //     name,
+  //     description,
+  //     actions = {},
+  //     dropped = true,
+  //     url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
+  //   ) {
+  //     super(name, description, actions, url);
+  //     this.dropped = dropped;
+  //     const drop = () => {
+  //       addToPlace(removeFromInventory(this));
+  //       this.dropped = true;
+  //       this.actions["pick up"] = pickUp;
+  //       delete this.actions["drop"];
+  //     };
+  //     const pickUp = () => {
+  //       addToInventory(removeFromPlace(this));
+  //       this.dropped = false;
+  //       this.actions["drop"] = drop;
+  //       delete this.actions["pick up"];
+  //     };
+  //     if (dropped) {
+  //       this.actions["pick up"] = pickUp;
+  //     } else {
+  //       this.actions["drop"] = drop;
+  //     }
+  //   }
+  // }
 
-  const Droppable = DroppableI.bind(
-    null,
-    addToInventory,
-    addToPlace,
-    removeFromInventory,
-    removeFromPlace
-  );
+  // const Droppable = DroppableI.bind(
+  //   null,
+  //   addToInventory,
+  //   addToPlace,
+  //   removeFromInventory,
+  //   removeFromPlace
+  // );
   class Bernard extends NPC {
     messages = [
       {
@@ -188,31 +188,31 @@ export function Gemini({
     "The instruction manual said that it can be used to read the brainwaves of a subject, but that it's very fragile and will turn off if moved around. It's currently turned on.";
   const offMessage =
     "The instruction manual said that it can be used to read the brainwaves of a subject, but that it's very fragile and will turn off if moved around. It's currently turned off.";
-  class CerebralScanner extends Droppable {
-    active = false;
+  // class CerebralScanner extends Droppable {
+  //   active = false;
 
-    constructor() {
-      super(
-        "Cerebral Scanner",
-        offMessage,
-        {
-          use: () => {
-            if (this.active) {
-              this.active = false;
-              this.description = offMessage;
-              return "You turn off the scanner.";
-            } else {
-              this.active = true;
-              this.description = onMessage;
-              return "You turn on the scanner.";
-            }
-          },
-        },
-        true,
-        "https://cdna.artstation.com/p/assets/images/images/029/191/042/large/yuri-isachenko-scan-version-new.jpg?1596731952"
-      );
-    }
-  }
+  //   constructor() {
+  //     super(
+  //       "Cerebral Scanner",
+  //       offMessage,
+  //       {
+  //         use: () => {
+  //           if (this.active) {
+  //             this.active = false;
+  //             this.description = offMessage;
+  //             return "You turn off the scanner.";
+  //           } else {
+  //             this.active = true;
+  //             this.description = onMessage;
+  //             return "You turn on the scanner.";
+  //           }
+  //         },
+  //       },
+  //       true,
+  //       "https://cdna.artstation.com/p/assets/images/images/029/191/042/large/yuri-isachenko-scan-version-new.jpg?1596731952"
+  //     );
+  //   }
+  // }
 
   useEffect(() => {
     places["Matthews Arena"].npcs = [new Dog()];

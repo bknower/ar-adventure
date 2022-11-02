@@ -3,6 +3,7 @@ import {
   BottomNavigation,
   BottomNavigationAction,
   FormControlLabel,
+  FormLabel,
   Paper,
   Switch,
 } from "@mui/material";
@@ -707,20 +708,19 @@ function UI() {
             label="Near Me"
             onClick={() => setPage("nearme")}
           ></BottomNavigationAction>
-          {/* <BottomNavigationAction
-            icon={<BookIcon />}
-            label="Log"
-            onClick={() => setPage("log")}
-          ></BottomNavigationAction> */}
-          <FormControlLabel
-            control={
-              <Switch
-                checked={debugMode}
-                onClick={(event) => setDebugMode(!debugMode)}
+          <BottomNavigationAction
+            icon={
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={debugMode}
+                    onClick={(event) => setDebugMode(!debugMode)}
+                  />
+                }
               />
             }
             label="Debug Mode"
-          />
+          ></BottomNavigationAction>
         </BottomNavigation>
       </Paper>
     </>
