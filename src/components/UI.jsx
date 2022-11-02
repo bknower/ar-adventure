@@ -554,21 +554,30 @@ function UI() {
     }
   }
 
-  const Droppable = DroppableI.bind(
-    null,
-    addToInventory,
-    addToPlace,
-    removeFromInventory,
-    removeFromPlace
-  );
-
-  class Shield extends DroppableI {
-    constructor(dropped) {
+  class Droppable extends DroppableI {
+    constructor(
+      name,
+      description,
+      actions = {},
+      dropped = true,
+      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
+    ) {
       super(
         addToInventory,
         addToPlace,
         removeFromInventory,
         removeFromPlace,
+        name,
+        description,
+        actions,
+        url
+      );
+    }
+  }
+
+  class Shield extends Droppable {
+    constructor(dropped) {
+      super(
         "Shield",
         "A shield",
         {
