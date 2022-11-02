@@ -104,6 +104,7 @@ export function Pisces({
     "https://upload.wikimedia.org/wikipedia/commons/6/6a/Paws%2C_Northeastern_Mascot.jpg",
     [{ m: "I hate you" }]
   );
+
   useEffect(() => {
     places["Koi Pond"].npcs = [new FishMan()];
 
