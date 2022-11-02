@@ -14,7 +14,7 @@ export function Gemini({
   setPlayerPlace,
   playerLocation,
   setPlayerLocation,
-  // Droppable,
+  Droppable,
   tempPlaces,
   addToInventory,
   removeFromInventory,
@@ -217,7 +217,7 @@ export function Gemini({
   useEffect(() => {
     places["Matthews Arena"].npcs = [new Dog()];
     places["Hayden Hall"].npcs = [new ProfessorGurdon()];
-    places["ISEC"].items.push(new CerebralScanner());
+    // places["ISEC"].items.push(new CerebralScanner());
     console.log("test");
   }, []);
   useEffect(() => {
