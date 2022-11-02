@@ -24,7 +24,7 @@ import { Aoun } from "../classes/NPCs";
 import { Person } from "./Person";
 import { ItemList } from "./ItemList";
 
-function Room({ playerPlace }) {
+function Room({ playerPlace, places }) {
   const [refresh, setRefresh] = useState(true);
 
   useEffect(() => {
@@ -36,30 +36,30 @@ function Room({ playerPlace }) {
       <Stack spacing={2}>
         <Container component="main" sx={{ mt: 8, mb: 2 }} maxWidth="sm">
           <Typography variant="h2" component="h1" gutterBottom>
-            {playerPlace.name}
+            {playerPlace}
           </Typography>
           <Typography variant="body1">{playerPlace.description}</Typography>
         </Container>
-        {playerPlace.npcs.length > 0 && (
+        {places[playerPlace].npcs.length > 0 && (
           <>
             <Typography variant="h4" component="h1" gutterBottom>
               People
             </Typography>
             <Container component="main" style={{ overflow: "auto" }}>
               <Stack direction="row" xs={12} sm={12} md={12}>
-                {playerPlace.npcs.map((person, i) => (
+                {places[playerPlace].npcs.map((person, i) => (
                   <Person key={i} person={person} />
                 ))}
               </Stack>
             </Container>
           </>
         )}
-        {playerPlace.items.length > 0 && (
+        {places[playerPlace].items.length > 0 && (
           <>
             <Typography variant="h4" component="h1" gutterBottom>
               Items
             </Typography>
-            <ItemList items={playerPlace.items} />
+            <ItemList items={places[playerPlace].items} />
           </>
         )}
         <br />

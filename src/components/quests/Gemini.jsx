@@ -59,8 +59,8 @@ export function Gemini({
         withVar(setPlaces, (places) =>
           withVar(setPlayerPlace, (playerPlace) => {
             if (
-              playerPlace.name === "Mugar Life Sciences" &&
-              !places["Mugar Life Sciences"].npcs.some(
+              playerPlace === "Mugar Life Sciences" &&
+              !places[playerPlace].npcs.some(
                 (i) => i.name === "Bernard the Brainy Husky"
               )
             ) {
@@ -70,7 +70,7 @@ export function Gemini({
           })
         ),
     },
-    true,
+    false,
     "https://cdn.vadasabi.com/images/steppes/old/366376.jpg"
   );
   class Dog extends NPC {

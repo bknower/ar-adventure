@@ -77,7 +77,7 @@ const Map = ({
                 " meters)"
             );
             console.log("set player place to " + nearestPlace.name);
-            setPlayerPlace(nearestPlace);
+            setPlayerPlace(nearestPlace.name);
           }
         }
       });

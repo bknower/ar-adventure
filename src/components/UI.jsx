@@ -89,7 +89,7 @@ function UI() {
   const [pageHeight, setPageHeight] = useState("100px");
   const [places, setPlaces] = useState({});
   const [inventory, setInventory] = useState([]);
-  const [playerPlace, setPlayerPlace] = useState(outside);
+  const [playerPlace, setPlayerPlace] = useState("Outside");
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
   const [debugMode, setDebugMode] = useState(true);
 
@@ -107,14 +107,14 @@ function UI() {
     var newPlace;
     setPlayerPlace((playerPlace) => {
       setPlaces((places) => {
-        newPlace = { ...places[playerPlace.name] };
+        newPlace = { ...places[playerPlace] };
         newPlace.items = [...newPlace.items, item];
 
         const newPlaces = { ...places };
-        newPlaces[playerPlace.name] = newPlace;
+        newPlaces[playerPlace] = newPlace;
         return newPlaces;
       });
-      return newPlace;
+      return playerPlace;
     });
     return item;
   };
@@ -123,15 +123,15 @@ function UI() {
     setPlayerPlace((playerPlace) => {
       var newPlace;
       setPlaces((places) => {
-        newPlace = { ...places[playerPlace.name] };
+        newPlace = { ...places[playerPlace] };
         newPlace.items = newPlace.items.filter((i) => {
           return i !== item;
         });
         const newPlaces = { ...places };
-        newPlaces[playerPlace.name] = newPlace;
+        newPlaces[playerPlace] = newPlace;
         return newPlaces;
       });
-      return newPlace;
+      return playerPlace;
     });
 
     return item;
@@ -594,8 +594,6 @@ function UI() {
     }
   }
 
-  const [lastPlayerPlace, setLastPlayerPlace] = useState(outside);
-
   useEffect(() => {
     for (let place of locations) {
       places[place.name] = place;
@@ -618,9 +616,9 @@ function UI() {
               place.location.distanceTo(playerLocation) < maxDistance
             ) {
               console.log("set player place to", place.name);
-              setPlayerPlace(place);
+              setPlayerPlace(place.name);
             } else {
-              setPlayerPlace(outside);
+              setPlayerPlace("Outside");
             }
           });
         }
@@ -635,7 +633,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace(places["ISEC"]);
+    setPlayerPlace("ISEC");
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -653,7 +651,7 @@ function UI() {
 
   useEffect(() => {
     setPage("nearme");
-  }, [playerPlace && playerPlace.name]);
+  }, [playerPlace]);
   return (
     <>
       {QuestWrapper({
@@ -699,7 +697,7 @@ function UI() {
           </Stack>
         </Container>
       )}
-      {page === "nearme" && <Room playerPlace={playerPlace} />}
+      {page === "nearme" && <Room playerPlace={playerPlace} places={places} />}
       {/* <DialogueTree dialogue={dialogue} /> */}
       <Modal
         open={showMessage}
