@@ -22,42 +22,13 @@ import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { Aoun } from "../classes/NPCs";
 import { Person } from "./Person";
+import { Item } from "./Item";
 export const ItemList = ({ items }) => {
   return (
     <Container component="main" style={{ overflow: "auto" }}>
       <Stack direction="row">
         {items.map((item, i) => (
-          <Grid key={i} item xs={12} sm={6} md={4} paddingRight="1rem">
-            <Box sx={{ minWidth: 250 }}>
-              <Card variant="outlined">
-                <>
-                  <CardContent>
-                    <Typography variant="h5" component="div">
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body2">{item.description}</Typography>
-                  </CardContent>
-                  <CardMedia
-                    component="img"
-                    // image={require("../assets/people/Joseph_Aoun.jpg")}
-                    image={item.url}
-                    style={{
-                      height: "40vh",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                  <CardActions>
-                    {Object.entries(item.actions).map(([verb, action]) => (
-                      <Button size="small" onClick={action} key={verb}>
-                        {verb}
-                      </Button>
-                    ))}
-                  </CardActions>
-                </>
-              </Card>
-            </Box>
-          </Grid>
+          <Item key={i} item={item} />
         ))}
       </Stack>
     </Container>

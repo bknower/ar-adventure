@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
+import { withVar } from "./UI";
 
 var greenIcon = new L.Icon({
   iconUrl:
@@ -20,6 +21,9 @@ const Map = ({
   setPlayerLocation,
   playerPlace,
   setPlayerPlace,
+  debugMode,
+  setDebugMode,
+  maxDistance,
 }) => {
   const container = document.getElementById("map");
 
@@ -56,27 +60,31 @@ const Map = ({
       ],
     });
     map.current.on("click", (e) => {
-      console.log([e.latlng.lat, e.latlng.lng]);
-      // navigator.clipboard.writeText(
-      //   "[" + e.latlng.lat + ", " + e.latlng.lng + "]"
-      // );
-      const { nearestDistance, nearestPlace } = findNearestPlace(e.latlng);
-      console.log(nearestPlace, nearestDistance);
-      if (nearestDistance < 15) {
-        console.log(
-          "You are near " +
-            nearestPlace.name +
-            " (" +
-            nearestDistance.toFixed(2) +
-            " meters)"
-        );
-        console.log("set player place to " + nearestPlace.name);
-        setPlayerPlace(nearestPlace);
-      }
+      withVar(setDebugMode, (debugMode) => {
+        if (debugMode) {
+          console.log([e.latlng.lat, e.latlng.lng]);
+          // navigator.clipboard.writeText(
+          //   "[" + e.latlng.lat + ", " + e.latlng.lng + "]"
+          // );
+          const { nearestDistance, nearestPlace } = findNearestPlace(e.latlng);
+          console.log(nearestPlace, nearestDistance);
+          if (nearestDistance < maxDistance) {
+            console.log(
+              "You are near " +
+                nearestPlace.name +
+                " (" +
+                nearestDistance.toFixed(2) +
+                " meters)"
+            );
+            console.log("set player place to " + nearestPlace.name);
+            setPlayerPlace(nearestPlace);
+          }
+        }
+      });
     });
     for (const [name, place] of Object.entries(markers)) {
       const location = place.location;
-      L.circle(location, { radius: 15 }).addTo(map.current);
+      L.circle(location, { radius: maxDistance }).addTo(map.current);
       L.marker(location).bindTooltip(name).addTo(map.current);
     }
 

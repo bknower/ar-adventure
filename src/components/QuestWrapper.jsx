@@ -43,7 +43,6 @@ import DialogueTree from "react-dialogue-tree";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
 import { Aoun, Paws } from "../classes/NPCs";
 import { Shield, Sword } from "../classes/Items";
-import { GenerateGameState } from "./GenerateGame";
 
 export function QuestWrapper(props) {
   return <>{props.children.map((child) => child({ ...props }))}</>;

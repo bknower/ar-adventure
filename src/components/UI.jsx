@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  FormControlLabel,
+  Paper,
+  Switch,
+} from "@mui/material";
 // import { RestoreIcon, FavoriteIcon, LocationOnIcon } from "@mui/icons-material";
 import BookIcon from "@mui/icons-material/LibraryBooks";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -36,9 +42,9 @@ import DialogueTree from "react-dialogue-tree";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
 import { Aoun, Paws } from "../classes/NPCs";
 import { Shield, Sword } from "../classes/Items";
-import { GenerateGameState } from "./GenerateGame";
-import { Pisces } from "./Pisces";
+import { Pisces } from "./quests/Pisces";
 import { QuestWrapper } from "./QuestWrapper";
+import { Gemini } from "./quests/Gemini";
 
 /*global globalThis*/
 
@@ -55,7 +61,7 @@ const style = {
 };
 
 const outside = new Place("Outside", "You are outside", undefined);
-const maxDistance = 25;
+const maxDistance = 15;
 
 const errorHandler = (err) => {
   if (err.code === 1) {
@@ -64,6 +70,16 @@ const errorHandler = (err) => {
     alert("Error: Position is unavailable!");
   }
 };
+
+export const withVar = (setter, callback) => {
+  let result;
+  setter((variable) => {
+    result = callback(variable);
+    return variable;
+  });
+  return result;
+};
+
 function UI() {
   const [page, setPage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
@@ -75,6 +91,7 @@ function UI() {
   const [inventory, setInventory] = useState([]);
   const [playerPlace, setPlayerPlace] = useState(outside);
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
+  const [debugMode, setDebugMode] = useState(true);
 
   const [initialized, setInitialized] = useState(false);
   const addToInventory = (item) => {
@@ -122,7 +139,7 @@ function UI() {
   const locations = [
     new Place(
       "Snell Library",
-      "",
+      "Need a place to study? The fourth floor is especially good for working on group projects",
       L.latLng([42.33859787224553, -71.08837723731996]),
       () => {}
     ),
@@ -134,13 +151,13 @@ function UI() {
     ),
     new Place(
       "Cy Young Statue",
-      "",
+      "This statue marks the original site of the pitching mound at the Huntington Avenue Grounds ballpark. ",
       L.latLng([42.33893888345322, -71.08910143375398]),
       () => {}
     ),
     new Place(
       "SnEngineering",
-      "",
+      "Snell Engineering, famous for not being Snell Library, a very creepy gateway, and probably some other stuff.",
       L.latLng([42.33811410898767, -71.08877420425416]),
       () => {}
     ),
@@ -152,19 +169,19 @@ function UI() {
     ),
     new Place(
       "Shillman Hall",
-      "",
+      "The cat statue outside is officially named Yitz",
       L.latLng([42.3374439717689, -71.09007239341737]),
       () => {}
     ),
     new Place(
       "Centennial",
-      "",
+      "BYOH (Bring your own hammock)",
       L.latLng([42.337083125693106, -71.09050154685976]),
       () => {}
     ),
     new Place(
       "EV",
-      "",
+      "Honors only",
       L.latLng([42.340287049189364, -71.08696639537813]),
       () => {}
     ),
@@ -176,13 +193,13 @@ function UI() {
     ),
     new Place(
       "Barletta Natatorium",
-      "",
+      "No running. Don’t dive in the deep end",
       L.latLng([42.338958709629345, -71.09008312225343]),
       () => {}
     ),
     new Place(
       "Cabot",
-      "",
+      "I’ve only been in here for covid testing before",
       L.latLng([42.33972796043619, -71.0895359516144]),
       () => {}
     ),
@@ -194,7 +211,7 @@ function UI() {
     ),
     new Place(
       "Ell Hall",
-      "",
+      "Rub King Husky’s nose for luck",
       L.latLng([42.33985088108484, -71.08811974525453]),
       () => {}
     ),
@@ -218,7 +235,7 @@ function UI() {
     ),
     new Place(
       "ISEC",
-      "It's ISEC",
+      "The Interdisciplinary Science & Engineering Complex. Named the Most Beautiful Building in Boston in 2018",
       L.latLng([42.33783257291951, -71.08726143836977]),
       () => {}
     ),
@@ -236,7 +253,7 @@ function UI() {
     ),
     new Place(
       "Matthews Arena",
-      "",
+      "A few dogs seem to be playing hockey here",
       L.latLng([42.34178189328441, -71.08447194099428]),
       () => {}
     ),
@@ -254,13 +271,13 @@ function UI() {
     ),
     new Place(
       "ISEC 2",
-      "",
+      "Or “EXP” — what a stupid name",
       L.latLng([42.33745586775814, -71.08786761760713]),
       () => {}
     ),
     new Place(
       "ISEC Bridge",
-      "",
+      "Has anyone ever tried to polish the rust bridge?",
       L.latLng([42.33771361363867, -71.08807682991029]),
       () => {}
     ),
@@ -278,7 +295,7 @@ function UI() {
     ),
     new Place(
       "Renaissance Parking Garage",
-      "",
+      "Do knights park here?",
       L.latLng([42.33603229840315, -71.08801782131196]),
       () => {}
     ),
@@ -290,7 +307,7 @@ function UI() {
     ),
     new Place(
       "Churchill Hall",
-      "",
+      "Best sandwiches since Rebecca’s",
       L.latLng([42.338855613445276, -71.08862936496736]),
       () => {}
     ),
@@ -308,7 +325,7 @@ function UI() {
     ),
     new Place(
       "Speare",
-      "",
+      "Break a leg!",
       L.latLng([42.34078665620959, -71.08976662158967]),
       () => {}
     ),
@@ -320,13 +337,13 @@ function UI() {
     ),
     new Place(
       "Steast",
-      "",
+      "Anyone can cook",
       L.latLng([42.34123471309726, -71.09016358852388]),
       () => {}
     ),
     new Place(
       "Stwest",
-      "",
+      "West is NOT best",
       L.latLng([42.34081837715622, -71.09052300453187]),
       () => {}
     ),
@@ -453,7 +470,7 @@ function UI() {
     ),
     new Place(
       "Hurtig Hall",
-      "",
+      "Eerie, old building for science experiments",
       L.latLng([42.33965658704607, -71.08642995357515]),
       () => {}
     ),
@@ -471,31 +488,31 @@ function UI() {
     ),
     new Place(
       "Richards Dunkin'",
-      "",
+      "Northeastern students run on dunkin",
       L.latLng([42.33960503954725, -71.08844697475435]),
       () => {}
     ),
     new Place(
       "Ruggles Dunkin",
-      "",
+      "Northeastern students run on dunkin",
       L.latLng([42.336424873671724, -71.08912825584413]),
       () => {}
     ),
     new Place(
       "Shillman Dunkin",
-      "",
+      "Northeastern students run on dunkin",
       L.latLng([42.337491555712276, -71.09054982662202]),
       () => {}
     ),
     new Place(
       "Green Line Stop",
-      "",
+      "Don’t get hit by the trains as you cross",
       L.latLng([42.340025348689714, -71.08967006206514]),
       () => {}
     ),
     new Place(
       "Orange Line Stop",
-      "",
+      "Oak Grove or Forest Hills?",
       L.latLng([42.33671038141871, -71.08924090862276]),
       () => {}
     ),
@@ -558,16 +575,22 @@ function UI() {
     });
     var options = { timeout: 5000, enableHighAccuracy: true };
     navigator.geolocation.watchPosition((pos) => {
-      const position = [pos.coords.latitude, pos.coords.longitude];
-      setPlayerLocation(L.latLng(position));
-      // console.log("location updated", this.player.location);
-      Object.entries(places).forEach(([name, place]) => {
-        if (
-          place.location !== null &&
-          place.location.distanceTo(playerLocation) < maxDistance
-        ) {
-          console.log("set player place to", place.name);
-          setPlayerPlace(place);
+      withVar(setDebugMode, (debugMode) => {
+        if (!debugMode) {
+          const position = [pos.coords.latitude, pos.coords.longitude];
+          setPlayerLocation(L.latLng(position));
+          // console.log("location updated", this.player.location);
+          Object.entries(places).forEach(([name, place]) => {
+            if (
+              place.location !== null &&
+              place.location.distanceTo(playerLocation) < maxDistance
+            ) {
+              console.log("set player place to", place.name);
+              setPlayerPlace(place);
+            } else {
+              setPlayerPlace(outside);
+            }
+          });
         }
       });
     }, errorHandler);
@@ -579,7 +602,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace(places["IV"]);
+    setPlayerPlace(places["Matthews Arena"]);
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -595,6 +618,9 @@ function UI() {
     updatePageHeight();
   }, [bottomBarRef, page]);
 
+  useEffect(() => {
+    setPage("nearme");
+  }, [playerPlace]);
   return (
     <>
       {QuestWrapper({
@@ -612,7 +638,7 @@ function UI() {
         removeFromInventory,
         addToPlace,
         removeFromPlace,
-        children: [Pisces],
+        children: [Pisces, Gemini],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map
@@ -623,6 +649,9 @@ function UI() {
           setPlayerLocation={setPlayerLocation}
           playerPlace={playerPlace}
           setPlayerPlace={setPlayerPlace}
+          debugMode={debugMode}
+          setDebugMode={setDebugMode}
+          maxDistance={maxDistance}
         />
       </div>
       {page === "inventory" && (
@@ -678,11 +707,20 @@ function UI() {
             label="Near Me"
             onClick={() => setPage("nearme")}
           ></BottomNavigationAction>
-          <BottomNavigationAction
+          {/* <BottomNavigationAction
             icon={<BookIcon />}
             label="Log"
             onClick={() => setPage("log")}
-          ></BottomNavigationAction>
+          ></BottomNavigationAction> */}
+          <FormControlLabel
+            control={
+              <Switch
+                checked={debugMode}
+                onClick={(event) => setDebugMode(!debugMode)}
+              />
+            }
+            label="Debug Mode"
+          />
         </BottomNavigation>
       </Paper>
     </>

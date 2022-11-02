@@ -41,21 +41,28 @@ function Room({ playerPlace }) {
           </Typography>
           <Typography variant="body1">{playerPlace.description}</Typography>
         </Container>
-        <Typography variant="h4" component="h1" gutterBottom>
-          People
-        </Typography>
-        <Container component="main" style={{ overflow: "auto" }}>
-          <Stack direction="row" xs={12} sm={12} md={12}>
-            {people.map((person, i) => (
-              <Person key={i} person={person} />
-            ))}
-          </Stack>
-        </Container>
-
-        <Typography variant="h4" component="h1" gutterBottom>
-          Items
-        </Typography>
-        <ItemList items={playerPlace.items} />
+        {people.length > 0 && (
+          <>
+            <Typography variant="h4" component="h1" gutterBottom>
+              People
+            </Typography>
+            <Container component="main" style={{ overflow: "auto" }}>
+              <Stack direction="row" xs={12} sm={12} md={12}>
+                {people.map((person, i) => (
+                  <Person key={i} person={person} />
+                ))}
+              </Stack>
+            </Container>
+          </>
+        )}
+        {playerPlace.items.length > 0 && (
+          <>
+            <Typography variant="h4" component="h1" gutterBottom>
+              Items
+            </Typography>
+            <ItemList items={playerPlace.items} />
+          </>
+        )}
         <br />
         <br />
         <br />

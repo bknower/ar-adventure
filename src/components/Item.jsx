@@ -14,12 +14,14 @@ import Container from "@mui/material/Container";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import { CardMedia } from "@mui/material";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import { CardMedia } from "@mui/material";
+import { Aoun } from "../classes/NPCs";
+import { Person } from "./Person";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 const style = {
@@ -34,55 +36,35 @@ const style = {
   p: 4,
 };
 
-export const Person = ({ person }) => {
-  const [talkingTo, setTalkingTo] = useState(false);
+export const Item = ({ item, i }) => {
+  const [using, setUsing] = useState(false);
   const [inputting, setInputting] = useState(false);
   const [answer, setAnswer] = useState("");
   const [msg, setMsg] = useState("");
-  useEffect(() => {
-    if (talkingTo) {
-      const msg = person.getMsg();
-      const { m, effect, input } = msg;
-      if (effect) {
-        effect();
-      }
-      if (input) {
-        setInputting(true);
-      }
-      setMsg(msg);
-    }
-  }, [talkingTo]);
   const onClose = () => {
-    setTalkingTo(false);
+    setUsing(false);
     setInputting(false);
   };
   const submit = () => {
-    msg.input(answer);
+    // msg.input(answer);
     onClose();
   };
   return (
     <>
-      <Grid item xs={12} sm={6} md={4} paddingRight="1rem">
+      <Grid key={i} item xs={12} sm={6} md={4} paddingRight="1rem">
         <Box width="30vh">
           <Card variant="outlined">
             <>
               <CardContent>
-                <Typography
-                  sx={{
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    color: "textPrimary",
-                  }}
-                  gutterBottom
-                >
-                  {person.name}
+                <Typography variant="h5" component="div">
+                  {item.name}
                 </Typography>
-                <Typography variant="body4">{person.description}</Typography>
+                <Typography variant="body2">{item.description}</Typography>
               </CardContent>
               <CardMedia
                 component="img"
                 // image={require("../assets/people/Joseph_Aoun.jpg")}
-                image={person.url}
+                image={item.url}
                 style={{
                   height: "30vh",
                   width: "100%",
@@ -90,26 +72,36 @@ export const Person = ({ person }) => {
                 }}
               />
               <CardActions>
-                <Button size="small" onClick={() => setTalkingTo(true)}>
-                  Talk To
-                </Button>
+                {Object.entries(item.actions).map(([verb, action]) => (
+                  <Button
+                    size="small"
+                    onClick={
+                      verb === "use"
+                        ? () => {
+                            setUsing(true);
+                            setMsg(action());
+                          }
+                        : action
+                    }
+                    key={verb}
+                  >
+                    {verb}
+                  </Button>
+                ))}
               </CardActions>
             </>
           </Card>
         </Box>
       </Grid>
       <Modal
-        open={talkingTo}
+        open={using}
         onClose={onClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            {person.name}
-          </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {msg.m}
+            {msg}
           </Typography>
           {inputting && (
             <>

@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import L, { LatLng } from "leaflet";
-import { Place } from "../classes/Place";
-import { NPC } from "../classes/NPC";
+import { Place } from "../../classes/Place";
+import { NPC } from "../../classes/NPC";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
+import { withVar } from "../UI";
 
 export function Pisces({
   places,
@@ -20,23 +21,6 @@ export function Pisces({
   addToPlace,
   removeFromPlace,
 }) {
-  //   class Shield extends Droppable {
-  //     constructor(dropped) {
-  //       super(
-  //         "Shield",
-  //         "A shield",
-  //         {
-  //           defend: () => {
-  //             addToInventory(new Shield(false));
-  //           },
-  //           attack: () => {
-  //             console.log("You bash the enemy with your shield!");
-  //           },
-  //         },
-  //         dropped
-  //       );
-  //     }
-  //   }
   const Sword = new Droppable("Sword", "A sword", {
     attack: () => {
       console.log("You swing your sword at the enemy!");
@@ -51,27 +35,17 @@ export function Pisces({
       },
       {
         m: "you dropped a fish",
-        cond: () => {
-          let condition = false;
-          setPlaces((places) => {
-            condition = places["Koi Pond"].items.some(
-              (item) => item.name === "Fish"
-            );
-            return places;
-          });
-          return condition;
-        },
+        cond: () =>
+          withVar(setPlaces, (places) =>
+            places["Koi Pond"].items.some((item) => item.name === "Fish")
+          ),
       },
       {
         m: "I am a fishn'ts",
-        cond: () => {
-          let condition = false;
-          setInventory((inventory) => {
-            condition = inventory.some((i) => i.name === "Fish");
-            return inventory;
-          });
-          return condition;
-        },
+        cond: () =>
+          withVar(setInventory, (inventory) =>
+            inventory.some((i) => i.name === "Fish")
+          ),
       },
     ];
     constructor() {
