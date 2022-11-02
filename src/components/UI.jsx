@@ -570,6 +570,7 @@ function UI() {
         name,
         description,
         actions,
+        dropped,
         url
       );
     }
