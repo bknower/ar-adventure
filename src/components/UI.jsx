@@ -562,9 +562,13 @@ function UI() {
     removeFromPlace
   );
 
-  class Shield extends Droppable {
+  class Shield extends DroppableI {
     constructor(dropped) {
       super(
+        addToInventory,
+        addToPlace,
+        removeFromInventory,
+        removeFromPlace,
         "Shield",
         "A shield",
         {
@@ -621,7 +625,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace(places["Matthews Arena"]);
+    setPlayerPlace(places["ISEC"]);
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -639,7 +643,7 @@ function UI() {
 
   useEffect(() => {
     setPage("nearme");
-  }, [playerPlace]);
+  }, [playerPlace && playerPlace.name]);
   return (
     <>
       {QuestWrapper({
