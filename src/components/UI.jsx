@@ -60,7 +60,6 @@ const style = {
   p: 4,
 };
 
-const outside = new Place("Outside", "You are outside", undefined);
 const maxDistance = 15;
 
 const errorHandler = (err) => {
@@ -137,6 +136,7 @@ function UI() {
     return item;
   };
   const locations = [
+    new Place("Outside", "You are outside", undefined),
     new Place(
       "Snell Library",
       "Need a place to study? The fourth floor is especially good for working on group projects",

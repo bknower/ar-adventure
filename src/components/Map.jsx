@@ -39,10 +39,12 @@ const Map = ({
 
     for (const [name, place] of Object.entries(markers)) {
       const location = place.location;
-      var distance = latlng.distanceTo(L.latLng(location));
-      if (distance < nearestDistance) {
-        nearestDistance = distance;
-        nearestPlace = place;
+      if (location) {
+        var distance = latlng.distanceTo(L.latLng(location));
+        if (distance < nearestDistance) {
+          nearestDistance = distance;
+          nearestPlace = place;
+        }
       }
     }
     return { nearestPlace: nearestPlace, nearestDistance: nearestDistance };
@@ -84,8 +86,10 @@ const Map = ({
     });
     for (const [name, place] of Object.entries(markers)) {
       const location = place.location;
-      L.circle(location, { radius: maxDistance }).addTo(map.current);
-      L.marker(location).bindTooltip(name).addTo(map.current);
+      if (location) {
+        L.circle(location, { radius: maxDistance }).addTo(map.current);
+        L.marker(location).bindTooltip(name).addTo(map.current);
+      }
     }
 
     playerMarker.addTo(map.current);
