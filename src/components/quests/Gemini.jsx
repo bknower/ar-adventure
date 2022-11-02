@@ -4,6 +4,7 @@ import { Place } from "../../classes/Place";
 import { NPC } from "../../classes/NPC";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
 import { withVar } from "../UI";
+import { Item } from "../../classes/Item";
 export function Gemini({
   places,
   setPlaces,
@@ -13,13 +14,55 @@ export function Gemini({
   setPlayerPlace,
   playerLocation,
   setPlayerLocation,
-  Droppable,
+  // Droppable,
   tempPlaces,
   addToInventory,
   removeFromInventory,
   addToPlace,
   removeFromPlace,
 }) {
+  class DroppableI extends Item {
+    dropped;
+    constructor(
+      addToInventory,
+      addToPlace,
+      removeFromInventory,
+      removeFromPlace,
+      name,
+      description,
+      actions = {},
+      dropped = true,
+      url = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Question_mark_%28black%29.svg/1920px-Question_mark_%28black%29.svg.png"
+    ) {
+      super(name, description, actions, url);
+      this.dropped = dropped;
+      const drop = () => {
+        addToPlace(removeFromInventory(this));
+        this.dropped = true;
+        this.actions["pick up"] = pickUp;
+        delete this.actions["drop"];
+      };
+      const pickUp = () => {
+        addToInventory(removeFromPlace(this));
+        this.dropped = false;
+        this.actions["drop"] = drop;
+        delete this.actions["pick up"];
+      };
+      if (dropped) {
+        this.actions["pick up"] = pickUp;
+      } else {
+        this.actions["drop"] = drop;
+      }
+    }
+  }
+
+  const Droppable = DroppableI.bind(
+    null,
+    addToInventory,
+    addToPlace,
+    removeFromInventory,
+    removeFromPlace
+  );
   class Bernard extends NPC {
     messages = [
       {
@@ -70,7 +113,7 @@ export function Gemini({
           })
         ),
     },
-    true,
+    false,
     "https://cdn.vadasabi.com/images/steppes/old/366376.jpg"
   );
   class Dog extends NPC {
