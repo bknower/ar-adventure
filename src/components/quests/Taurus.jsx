@@ -65,7 +65,7 @@ export function Taurus({
 
     messages = [
       {
-        m: "**snorts** Catch me if you can!",
+        m: "**snorts** Try to catch my friend if you can!",
       },
       {
         m: "Ready... Set... GO!",
@@ -108,6 +108,10 @@ export function Taurus({
           }
           return false;
         },
+      },
+      {
+        m: "You caught them! Now I feel compelled to tell you the following word: fortitude.",
+        cond: () => this.found,
       },
     ];
     constructor() {
