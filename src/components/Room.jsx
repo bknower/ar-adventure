@@ -38,7 +38,9 @@ function Room({ playerPlace, places }) {
           <Typography variant="h2" component="h1" gutterBottom>
             {playerPlace}
           </Typography>
-          <Typography variant="body1">{playerPlace.description}</Typography>
+          <Typography variant="body1">
+            {places[playerPlace].description}
+          </Typography>
         </Container>
         {places[playerPlace].npcs.length > 0 && (
           <>

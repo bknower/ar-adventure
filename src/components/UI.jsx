@@ -72,6 +72,27 @@ const errorHandler = (err) => {
   }
 };
 
+function useStateCallback(initialState) {
+  const [state, setState] = useState(initialState);
+  const cbRef = useRef(null); // init mutable ref container for callbacks
+
+  const setStateCallback = useCallback((state, cb) => {
+    cbRef.current = cb; // store current, passed callback in ref
+    setState(state);
+  }, []); // keep object reference stable, exactly like `useState`
+
+  useEffect(() => {
+    // cb.current is `null` on initial render,
+    // so we only invoke callback on state *updates*
+    if (cbRef.current) {
+      cbRef.current(state);
+      cbRef.current = null; // reset callback after execution
+    }
+  }, [state]);
+
+  return [state, setStateCallback];
+}
+
 export const withVar = (setter, callback) => {
   let result;
   setter((variable) => {
@@ -96,6 +117,7 @@ function UI() {
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
   const [debugMode, setDebugMode] = useState(true);
   const [itemEvent, setItemEvent] = useState(false);
+  const markers = useRef([]);
 
   const [initialized, setInitialized] = useState(false);
   const addToInventory = (item) => {
@@ -141,14 +163,7 @@ function UI() {
     return item;
   };
   const roomContainsItem = (room, item) => {
-    return withVar(setPlaces, (places) => {
-      console.log(
-        "places[room]",
-        places[room],
-        places[room].items.some((i) => i.name === item)
-      );
-      return places[room].items.some((i) => i.name === item);
-    });
+    return room && room.items && room.items.some((i) => i.name === item);
   };
 
   const locations = [
@@ -689,6 +704,8 @@ function UI() {
         removeFromPlace,
         roomContainsItem,
         itemEvent,
+        map,
+        markers,
         children: [Pisces, Gemini, Aries, Leo],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
@@ -696,6 +713,7 @@ function UI() {
           height={pageHeight}
           map={map}
           places={places}
+          setPlaces={setPlaces}
           playerLocation={playerLocation}
           setPlayerLocation={setPlayerLocation}
           playerPlace={playerPlace}
@@ -703,6 +721,7 @@ function UI() {
           debugMode={debugMode}
           setDebugMode={setDebugMode}
           maxDistance={maxDistance}
+          markers={markers}
         />
       </div>
       {page === "inventory" && (

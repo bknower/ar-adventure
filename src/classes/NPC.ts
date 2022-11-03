@@ -24,7 +24,6 @@ export class NPC {
   }
 
   getMsg() {
-    console.log(this.messages);
     if (this.messages.length > 1) {
       for (var i = 1; i < this.messages.length; i++) {
         const msg = this.messages[i];

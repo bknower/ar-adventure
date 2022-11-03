@@ -17,6 +17,7 @@ const Map = ({
   height,
   map,
   places,
+  setPlaces,
   playerLocation,
   setPlayerLocation,
   playerPlace,
@@ -24,30 +25,32 @@ const Map = ({
   debugMode,
   setDebugMode,
   maxDistance,
+  markers,
 }) => {
   const container = document.getElementById("map");
 
-  const markers = places;
   const test = L.latLng(42.344547, -71.088532);
 
   //const playerCircle = L.circle(test, { radius: 40 }).addTo(map.current);
   var playerMarker = L.marker(test, { icon: greenIcon }).bindTooltip("player");
 
   const findNearestPlace = (latlng) => {
-    var nearestDistance = 999999999;
-    var nearestPlace = "";
+    return withVar(setPlaces, (places) => {
+      var nearestDistance = 999999999;
+      var nearestPlace = "";
 
-    for (const [name, place] of Object.entries(markers)) {
-      const location = place.location;
-      if (location) {
-        var distance = latlng.distanceTo(L.latLng(location));
-        if (distance < nearestDistance) {
-          nearestDistance = distance;
-          nearestPlace = place;
+      for (const [name, place] of Object.entries(places)) {
+        const location = place.location;
+        if (location) {
+          var distance = latlng.distanceTo(L.latLng(location));
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestPlace = place;
+          }
         }
       }
-    }
-    return { nearestPlace: nearestPlace, nearestDistance: nearestDistance };
+      return { nearestPlace: nearestPlace, nearestDistance: nearestDistance };
+    });
   };
 
   if (container && !map.current) {
@@ -70,7 +73,11 @@ const Map = ({
           // );
           const { nearestDistance, nearestPlace } = findNearestPlace(e.latlng);
           console.log(nearestPlace, nearestDistance);
-          if (nearestDistance < maxDistance) {
+          if (
+            nearestDistance < maxDistance ||
+            (nearestPlace.name === "Great Construction Project" &&
+              nearestDistance < 50)
+          ) {
             console.log(
               "You are near " +
                 nearestPlace.name +
@@ -84,11 +91,18 @@ const Map = ({
         }
       });
     });
-    for (const [name, place] of Object.entries(markers)) {
+
+    for (const [name, place] of Object.entries(places)) {
       const location = place.location;
       if (location) {
-        L.circle(location, { radius: maxDistance }).addTo(map.current);
-        L.marker(location).bindTooltip(name).addTo(map.current);
+        const circle = L.circle(location, { radius: maxDistance }).addTo(
+          map.current
+        );
+        const marker = L.marker(location).bindTooltip(name).addTo(map.current);
+        if (["Lake Hall", "Holmes Hall", "Nightingale Hall"].includes(name)) {
+          console.log(name);
+          markers.current.push({ circle: circle, marker: marker });
+        }
       }
     }
 
