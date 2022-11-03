@@ -19,9 +19,11 @@ export function QuestTemplate({
   removeFromInventory,
   addToPlace,
   removeFromPlace,
+  roomContainsItem,
+  itemEvent,
+  map,
+  markers,
 }) {
-  // put everything in here and then add this to the list of children in
-  // QuestWrapper in UI.jsx
   useEffect(() => {
     console.log("test");
   }, []);

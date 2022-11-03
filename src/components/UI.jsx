@@ -47,6 +47,7 @@ import { QuestWrapper } from "./QuestWrapper";
 import { Gemini } from "./quests/Gemini";
 import { Aries } from "./quests/Aries";
 import { Leo } from "./quests/Leo";
+import { Capricorn } from "./quests/Capricorn";
 
 /*global globalThis*/
 
@@ -524,13 +525,13 @@ function UI() {
       () => {}
     ),
     new Place(
-      "Ruggles Dunkin",
+      "Ruggles Dunkin'",
       "Northeastern students run on dunkin",
       L.latLng([42.336424873671724, -71.08912825584413]),
       () => {}
     ),
     new Place(
-      "Shillman Dunkin",
+      "Shillman Dunkin'",
       "Northeastern students run on dunkin",
       L.latLng([42.337491555712276, -71.09054982662202]),
       () => {}
@@ -666,7 +667,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("Barletta Natatorium");
+    setPlayerPlace("Richards Dunkin'");
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -706,7 +707,7 @@ function UI() {
         itemEvent,
         map,
         markers,
-        children: [Pisces, Gemini, Aries, Leo],
+        children: [Pisces, Gemini, Aries, Leo, Capricorn],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map
