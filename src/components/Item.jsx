@@ -72,22 +72,23 @@ export const Item = ({ item, i }) => {
                 }}
               />
               <CardActions>
-                {Object.entries(item.actions).map(([verb, action]) => (
-                  <Button
-                    size="small"
-                    onClick={
-                      verb === "use"
-                        ? () => {
-                            setUsing(true);
-                            setMsg(action());
-                          }
-                        : action
-                    }
-                    key={verb}
-                  >
-                    {verb}
-                  </Button>
-                ))}
+                {item.actions &&
+                  Object.entries(item.actions).map(([verb, action]) => (
+                    <Button
+                      size="small"
+                      onClick={
+                        verb === "use"
+                          ? () => {
+                              setUsing(true);
+                              setMsg(action());
+                            }
+                          : action
+                      }
+                      key={verb}
+                    >
+                      {verb}
+                    </Button>
+                  ))}
               </CardActions>
             </>
           </Card>

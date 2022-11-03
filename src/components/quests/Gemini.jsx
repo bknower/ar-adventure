@@ -142,9 +142,9 @@ export function Gemini({
   }
 
   const onMessage =
-    "The instruction manual said that it can be used to read the brainwaves of a subject, but that it's very fragile and will turn off if moved around. It's currently turned on.";
+    "The manual said that it can be used to read someone's brain waves, and it will turn off if moved around. It's currently turned on.";
   const offMessage =
-    "The instruction manual said that it can be used to read the brainwaves of a subject, but that it's very fragile and will turn off if moved around. It's currently turned off.";
+    "The manual said that it can be used to read someone's brain waves, and it will turn off if moved around. It's currently turned off.";
   class CerebralScanner extends Droppable {
     active = false;
 

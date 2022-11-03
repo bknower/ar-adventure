@@ -45,6 +45,8 @@ import { Aoun, Paws } from "../classes/NPCs";
 import { Pisces } from "./quests/Pisces";
 import { QuestWrapper } from "./QuestWrapper";
 import { Gemini } from "./quests/Gemini";
+import { Aries } from "./quests/Aries";
+import { Leo } from "./quests/Leo";
 
 /*global globalThis*/
 
@@ -79,6 +81,8 @@ export const withVar = (setter, callback) => {
   return result;
 };
 
+// export const changeOneObject = (object, key, value) => {
+
 function UI() {
   const [page, setPage] = useState("");
   const [showMessage, setShowMessage] = useState(false);
@@ -91,6 +95,7 @@ function UI() {
   const [playerPlace, setPlayerPlace] = useState("Outside");
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
   const [debugMode, setDebugMode] = useState(true);
+  const [itemEvent, setItemEvent] = useState(false);
 
   const [initialized, setInitialized] = useState(false);
   const addToInventory = (item) => {
@@ -104,10 +109,10 @@ function UI() {
 
   const addToPlace = (item) => {
     var newPlace;
-    setPlayerPlace((playerPlace) => {
-      setPlaces((places) => {
+    withVar(setPlayerPlace, (playerPlace) => {
+      withVar(setPlaces, (places) => {
         newPlace = { ...places[playerPlace] };
-        newPlace.items = [...newPlace.items, item];
+        newPlace.items.push(item);
 
         const newPlaces = { ...places };
         newPlaces[playerPlace] = newPlace;
@@ -135,6 +140,17 @@ function UI() {
 
     return item;
   };
+  const roomContainsItem = (room, item) => {
+    return withVar(setPlaces, (places) => {
+      console.log(
+        "places[room]",
+        places[room],
+        places[room].items.some((i) => i.name === item)
+      );
+      return places[room].items.some((i) => i.name === item);
+    });
+  };
+
   const locations = [
     new Place("Outside", "You are outside", undefined),
     new Place(
@@ -427,13 +443,13 @@ function UI() {
       () => {}
     ),
     new Place(
-      "Lake",
+      "Lake Hall",
       "",
       L.latLng([42.33818944941184, -71.09090387821199]),
       () => {}
     ),
     new Place(
-      "Nightingale",
+      "Nightingale Hall",
       "",
       L.latLng([42.338106178411465, -71.0899329185486]),
       () => {}
@@ -536,12 +552,14 @@ function UI() {
       this.dropped = dropped;
       const drop = () => {
         addToPlace(removeFromInventory(this));
+        setItemEvent((x) => !x);
         this.dropped = true;
         this.actions["pick up"] = pickUp;
         delete this.actions["drop"];
       };
       const pickUp = () => {
         addToInventory(removeFromPlace(this));
+        setItemEvent((x) => !x);
         this.dropped = false;
         this.actions["drop"] = drop;
         delete this.actions["pick up"];
@@ -633,7 +651,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("ISEC");
+    setPlayerPlace("Willis Hall");
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -669,7 +687,9 @@ function UI() {
         removeFromInventory,
         addToPlace,
         removeFromPlace,
-        children: [Pisces, Gemini],
+        roomContainsItem,
+        itemEvent,
+        children: [Pisces, Gemini, Aries, Leo],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map
