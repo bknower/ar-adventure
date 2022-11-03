@@ -196,9 +196,7 @@ export function Leo({
   const blanket = new Droppable(
     "Blanket",
     "It looks warm and fuzzy",
-    {
-      test: () => console.log(map.current),
-    },
+    {},
     true,
     "https://nypost.com/wp-content/uploads/sites/2/2021/12/EddieBauer110VoltFleeceSherpaThrow-Ash.jpeg?quality=90&strip=all"
   );

@@ -666,7 +666,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("Willis Hall");
+    setPlayerPlace("Barletta Natatorium");
   }, [initialized]);
 
   const updatePageHeight = () => {

@@ -30,7 +30,7 @@ export function Aries({
   const offMessage =
     "Someone must have forgotten this when they were swimming.";
 
-  const waitTime = 10;
+  const waitTime = 300;
   class Stopwatch extends Droppable {
     active = false;
     time = waitTime;
@@ -51,8 +51,14 @@ export function Aries({
               return "You reset the stopwatch.";
             } else {
               this.active = true;
+              this.stayedInPortal = true;
               this.interval = setInterval(() => {
                 this.time--;
+                if (
+                  withVar(setPlayerPlace, (place) => place !== "SnEngineering")
+                ) {
+                  this.stayedInPortal = false;
+                }
                 let onMessage =
                   offMessage +
                   " It reads: " +
@@ -61,8 +67,13 @@ export function Aries({
                   ("00" + (this.time % 60)).slice(-2);
                 if (this.time <= 0) {
                   clearInterval(this.interval);
-                  onMessage =
-                    "\nAfter a long wait, you saw a single word appear behind the portal: determination.";
+                  if (this.stayedInPortal) {
+                    onMessage =
+                      "\nAfter a long wait, you saw a single word appear behind the portal: determination.";
+                  } else {
+                    onMessage =
+                      "\nAfter such a long wait, nothing happened. What a waste of time.";
+                  }
                 }
                 this.description = onMessage;
                 if (this.dropped) {
