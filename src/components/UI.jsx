@@ -48,6 +48,7 @@ import { Gemini } from "./quests/Gemini";
 import { Aries } from "./quests/Aries";
 import { Leo } from "./quests/Leo";
 import { Capricorn } from "./quests/Capricorn";
+import { Taurus } from "./quests/Taurus";
 
 /*global globalThis*/
 
@@ -165,6 +166,24 @@ function UI() {
   };
   const roomContainsItem = (room, item) => {
     return room && room.items && room.items.some((i) => i.name === item);
+  };
+  const findNearestPlace = (latlng) => {
+    return withVar(setPlaces, (places) => {
+      var nearestDistance = 999999999;
+      var nearestPlace = "";
+
+      for (const [name, place] of Object.entries(places)) {
+        const location = place.location;
+        if (location) {
+          var distance = latlng.distanceTo(L.latLng(location));
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestPlace = place;
+          }
+        }
+      }
+      return { nearestPlace: nearestPlace, nearestDistance: nearestDistance };
+    });
   };
 
   const locations = [
@@ -642,19 +661,21 @@ function UI() {
       withVar(setDebugMode, (debugMode) => {
         if (!debugMode) {
           const position = [pos.coords.latitude, pos.coords.longitude];
+          const { nearestDistance, nearestPlace } = findNearestPlace(
+            L.latLng(position).latlng
+          );
           setPlayerLocation(L.latLng(position));
-          // console.log("location updated", this.player.location);
-          Object.entries(places).forEach(([name, place]) => {
-            if (
-              place.location !== null &&
-              place.location.distanceTo(playerLocation) < maxDistance
-            ) {
-              console.log("set player place to", place.name);
-              setPlayerPlace(place.name);
-            } else {
-              setPlayerPlace("Outside");
-            }
-          });
+          if (
+            nearestDistance < maxDistance ||
+            (nearestPlace.name === "Great Construction Project" &&
+              nearestDistance < 50)
+          ) {
+            console.log("set player place to " + nearestPlace.name);
+            setPlayerPlace(nearestPlace.name);
+          } else {
+            setPlayerPlace("Outside");
+            console.log("outside");
+          }
         }
       });
     }, errorHandler);
@@ -667,7 +688,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("Richards Dunkin'");
+    setPlayerPlace("Dodge Hall");
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -707,7 +728,9 @@ function UI() {
         itemEvent,
         map,
         markers,
-        children: [Pisces, Gemini, Aries, Leo, Capricorn],
+        maxDistance,
+        findNearestPlace,
+        children: [Pisces, Gemini, Aries, Leo, Capricorn, Taurus],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map

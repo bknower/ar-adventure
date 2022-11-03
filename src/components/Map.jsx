@@ -26,6 +26,7 @@ const Map = ({
   setDebugMode,
   maxDistance,
   markers,
+  findNearestPlace,
 }) => {
   const container = document.getElementById("map");
 
@@ -33,25 +34,6 @@ const Map = ({
 
   //const playerCircle = L.circle(test, { radius: 40 }).addTo(map.current);
   var playerMarker = L.marker(test, { icon: greenIcon }).bindTooltip("player");
-
-  const findNearestPlace = (latlng) => {
-    return withVar(setPlaces, (places) => {
-      var nearestDistance = 999999999;
-      var nearestPlace = "";
-
-      for (const [name, place] of Object.entries(places)) {
-        const location = place.location;
-        if (location) {
-          var distance = latlng.distanceTo(L.latLng(location));
-          if (distance < nearestDistance) {
-            nearestDistance = distance;
-            nearestPlace = place;
-          }
-        }
-      }
-      return { nearestPlace: nearestPlace, nearestDistance: nearestDistance };
-    });
-  };
 
   if (container && !map.current) {
     map.current = L.map("map", {
