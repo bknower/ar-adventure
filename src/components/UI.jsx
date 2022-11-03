@@ -117,7 +117,7 @@ function UI() {
   const [inventory, setInventory] = useState([]);
   const [playerPlace, setPlayerPlace] = useState("Outside");
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
-  const [debugMode, setDebugMode] = useState(true);
+  const [debugMode, setDebugMode] = useState(false);
   const [itemEvent, setItemEvent] = useState(false);
   const markers = useRef([]);
 
@@ -656,29 +656,7 @@ function UI() {
     globalThis.log = new Messages(() => {
       setShowMessage(true);
     });
-    var options = { timeout: 5000, enableHighAccuracy: true };
-    navigator.geolocation.watchPosition((pos) => {
-      withVar(setDebugMode, (debugMode) => {
-        if (!debugMode) {
-          const position = [pos.coords.latitude, pos.coords.longitude];
-          const { nearestDistance, nearestPlace } = findNearestPlace(
-            L.latLng(position).latlng
-          );
-          setPlayerLocation(L.latLng(position));
-          if (
-            nearestDistance < maxDistance ||
-            (nearestPlace.name === "Great Construction Project" &&
-              nearestDistance < 50)
-          ) {
-            console.log("set player place to " + nearestPlace.name);
-            setPlayerPlace(nearestPlace.name);
-          } else {
-            setPlayerPlace("Outside");
-            console.log("outside");
-          }
-        }
-      });
-    }, errorHandler);
+
     setInitialized(true);
   }, []);
 
@@ -689,6 +667,16 @@ function UI() {
     }
     setPlaces((places) => ({ ...places }));
     setPlayerPlace("Dodge Hall");
+    var options = { timeout: 5000, enableHighAccuracy: true };
+
+    navigator.geolocation.watchPosition((pos) => {
+      withVar(setDebugMode, (debugMode) => {
+        if (!debugMode) {
+          const position = [pos.coords.latitude, pos.coords.longitude];
+          setPlayerLocation(L.latLng(position[0], position[1]));
+        }
+      });
+    }, errorHandler);
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -707,6 +695,38 @@ function UI() {
   useEffect(() => {
     setPage("nearme");
   }, [playerPlace]);
+
+  const firstRun = useRef(true);
+  useEffect(() => {
+    if (!firstRun.current) {
+      var nearestDistance = 999999999;
+      var nearestPlace = "";
+
+      for (const [name, place] of Object.entries(places)) {
+        const location = place.location;
+        if (location) {
+          var distance = playerLocation.distanceTo(L.latLng(location));
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestPlace = place;
+          }
+        }
+      }
+      if (
+        nearestDistance < maxDistance ||
+        (nearestPlace.name === "Great Construction Project" &&
+          nearestDistance < 50)
+      ) {
+        console.log("set player place to " + nearestPlace.name);
+        setPlayerPlace(nearestPlace.name);
+      } else {
+        setPlayerPlace("Outside");
+        console.log("outside");
+      }
+    } else {
+      firstRun.current = false;
+    }
+  }, [playerLocation]);
   return (
     <>
       {QuestWrapper({
