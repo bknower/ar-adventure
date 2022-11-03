@@ -69,7 +69,12 @@ export function Aries({
                   clearInterval(this.interval);
                   if (this.stayedInPortal) {
                     onMessage =
-                      "\nAfter a long wait, you saw a single word appear behind the portal: determination.";
+                      "\nAfter a long wait, you hear a strange sound coming from the portal. Something must have changed.";
+
+                    let index = places["SnEngineering"].npcs.findIndex(
+                      (npc) => npc.name === "Interdimensional Portal"
+                    );
+                    places["SnEngineering"].npcs[index].finished = true;
                   } else {
                     onMessage =
                       "\nAfter such a long wait, nothing happened. What a waste of time.";
@@ -100,7 +105,28 @@ export function Aries({
       );
     }
   }
+
+  class Portal extends NPC {
+    finished = false;
+    messages = [
+      {
+        m: "You shout into the void. There is no response.",
+      },
+      {
+        m: "You shout into the void. The void responds with a single word: determination.",
+        cond: () => this.finished,
+      },
+    ];
+    constructor() {
+      super(
+        "Interdimensional Portal",
+        "It emanates otherworldly sounds.",
+        "https://i.ytimg.com/vi/h27ugp3gzWI/maxresdefault.jpg"
+      );
+    }
+  }
   useEffect(() => {
     places["Barletta Natatorium"].items.push(new Stopwatch());
+    places["SnEngineering"].npcs.push(new Portal());
   }, []);
 }
