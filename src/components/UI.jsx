@@ -49,6 +49,7 @@ import { Aries } from "./quests/Aries";
 import { Leo } from "./quests/Leo";
 import { Capricorn } from "./quests/Capricorn";
 import { Taurus } from "./quests/Taurus";
+import { Libra } from "./quests/Libra";
 
 /*global globalThis*/
 
@@ -746,7 +747,7 @@ function UI() {
         map,
         markers,
         maxDistance,
-        children: [Pisces, Gemini, Aries, Leo, Capricorn, Taurus],
+        children: [Pisces, Gemini, Aries, Leo, Capricorn, Taurus, Libra],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map

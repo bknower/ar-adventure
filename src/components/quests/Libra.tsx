@@ -29,47 +29,63 @@ export function Libra({
     class Mingus extends NPC {
         messages = [
             {
-                m: "ayo?",
+                m: "meow", // should not be possible?
             },
             {
-                m: "MESSAGE 1.1!",
-                cond: () => convStage == 0,
+                m: "All alone...",
+                cond: () => {
+                    if (convStage !== 0) {
+                        return false;
+                    } else if (roomContainsItem(places["Speare Hall"], "Love Letter")) {
+                        convStage = 1;
+                        this.timesTalkedTo = 0;
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
             },
             {
-                m: "MESSAGE 2.1!",
-                cond: () => convStage == 1 && this.timesTalkedTo == 0,
+                m: "Thank you for this. It's so hard being this close to Paws but yet so far away.",
+                cond: () => convStage === 1 && this.timesTalkedTo === 0,
             },
             {
-                m: "MESSAGE 2.2!",
-                cond: () => convStage == 1 && this.timesTalkedTo == 1,
+                m: "You see, I have a deathly fear of cars, and especially trains. Even the concept of crossing Huntington gives me chills. It feels like I'm on an island.",
+                cond: () => convStage === 1 && this.timesTalkedTo === 1,
             },
             {
-                m: "MESSAGE 2.3!",
+                m: "Let Paws know what my situation is. I'm sure he'd want an explanation for my absence.",
                 cond: () => {
                     if (convStage == 1 && this.timesTalkedTo >= 2) {
                         convStage = 2;
-                        this.timesTalkedTo = 0; // set in other NPC?
+                        this.timesTalkedTo = 0;
                         return true;
                     }
                     return false;
                 }
             },
             {
-                m: "MESSAGE 3.1!",
-                cond: () => convStage == 2,
+                m: "snzzzzzz...",
+                cond: () => {
+                    if (convStage !== 2) {
+                        return false;
+                    } else if (roomContainsItem(places["Speare Hall"], "Another Love Letter")) {
+                        convStage = 3;
+                        this.timesTalkedTo = 0;
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
             },
             {
-                m: "MESSAGE 4.1!",
+                m: "I love Paws, but he needs to be more accomodating of my struggles. We all have our own battles that we're fighting.",
                 cond: () => convStage == 3 && this.timesTalkedTo == 0,
             },
             {
-                m: "MESSAGE 4.2!",
-                cond: () => convStage == 3 && this.timesTalkedTo == 1,
-            },
-            {
-                m: "MESSAGE 4.3!",
+                m: "I don't want to keep you running back and forth across that wretched avenue. Tell Paws that he needs to find some way, some method for us to be together. Our separation ends now.",
                 cond: () => {
-                    if (convStage == 3 && this.timesTalkedTo >= 2) {
+                    if (convStage == 3 && this.timesTalkedTo >= 1) {
                         convStage = 4;
                         this.timesTalkedTo = 0;
                         return true;
@@ -78,8 +94,26 @@ export function Libra({
                 }
             },
             {
-                m: "MESSAGE 5.1!",
-                cond: () => convStage == 4, // about to be moved via the hamper
+                m: "Now it's just waiting...",
+                cond: () => {
+                    if (convStage !== 4) {
+                        return false;
+                    } else if (/- TODO: track if paws is done suggesting the hamper -/) {
+                        convStage = 5;
+                        this.timesTalkedTo = 0;
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
+            },
+            {
+                m: "This is...a curious solution. But I'll take it if I can be with Paws again. Away we go!",
+                cond: () => convStage === 5, // TODO: also detect if in the hamper
+            }, // TODO: do we remove Mingus from Speare here?
+            {
+                m: "I'm somehow more optimistic this time around.",
+                cond: () => convStage === 5,
             },
         ];
         constructor() {
@@ -94,21 +128,21 @@ export function Libra({
     class Paws extends NPC {
         messages = [
             {
-                m: "ayo?",
+                m: "woof", // should not be possible?
             },
             {
-                m: "MESSAGE 1.1!",
-                cond: () => convStage == 0 && this.timesTalkedTo == 0,
+                m: "Can I let you in on a secret? The love of my life is stuck on the other side of the railroad tracks. And what's worse, our opposing affiliations make it impossible to not be secretive about our struggle.",
+                cond: () => convStage === 0 && this.timesTalkedTo === 0,
             },
             {
-                m: "MESSAGE 1.2!",
-                cond: () => convStage == 0 && this.timesTalkedTo == 1,
+                m: "He was covertly mailed into Speare to be with me, but it's been radio silence ever since. I just want to communicate with him, if nothing else.",
+                cond: () => convStage === 0 && this.timesTalkedTo === 1,
             },
             {
-                m: "MESSAGE 1.3!",
+                m: "If you could give this letter to Mingus, it would ease my troubles, if only by a little. He needs to know I'm here for him.",
                 cond: () => {
-                    if (convStage == 0 && this.timesTalkedTo >= 2) {
-                        addToInventory(loveLetter);
+                    if (convStage === 0 && this.timesTalkedTo >= 2) {
+                        addToInventory(LoveLetter);
                         convStage = 1;
                         this.timesTalkedTo = 0;
                         return true;
@@ -117,21 +151,32 @@ export function Libra({
                 }
             },
             {
-                m: "MESSAGE 2.1!",
-                cond: () => convStage == 1,
+                m: "I wonder if Mingus received my letter...",
+                cond: () => {
+                    if (convStage !== 1) {
+                        return false;
+                    } else if (/- TODO: find way to set stage to next on receival -/) {
+                        convStage = 2;
+                        this.timesTalkedTo = 0;
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
             },
             {
-                m: "MESSAGE 3.1!",
+                m: "Bruh. Is the only thing keeping us apart a fear of moving pieces of metal? That's so lame.",
                 cond: () => convStage == 2 && this.timesTalkedTo == 0,
             },
             {
-                m: "MESSAGE 3.2!",
+                m: "I can't just saunter over to Speare because then I'll get swarmed by students and word will get out about my illicit relationship. This is so frustrating.",
                 cond: () => convStage == 2 && this.timesTalkedTo == 1,
             },
             {
-                m: "MESSAGE 3.3!",
+                m: "Give him this other love letter. I fear I may have been too aggressive in this letter, but Mingus needs to get over himself.",
                 cond: () => {
                     if (convStage == 2 && this.timesTalkedTo >= 2) {
+                        addToInventory(AnotherLoveLetter);
                         convStage = 3;
                         this.timesTalkedTo = 0;
                         return true;
@@ -140,21 +185,39 @@ export function Libra({
                 }
             },
             {
-                m: "MESSAGE 4.1!",
-                cond: () => convStage == 3,
+                m: "Are trains really that scary?",
+                cond: () => {
+                    if (convStage !== 3) {
+                        return false;
+                    } else if (/- TODO: find way to set stage to next on receival -/) {
+                        convStage = 4;
+                        this.timesTalkedTo = 0;
+                        return false;
+                    } else {
+                        return true;
+                    }
+                },
             },
             {
-                m: "MESSAGE 5.1!",
+                m: "I suppose he's right. We need to be together on mutual terms. But then how do we get him across the street if he can't stand being around cars and trains?",
                 cond: () => convStage == 4 && this.timesTalkedTo == 0,
             },
             {
-                m: "MESSAGE 5.2!",
+                m: "Hmmm.....",
                 cond: () => convStage == 4 && this.timesTalkedTo == 1,
             },
             {
-                m: "MESSAGE 5.3!",
+                m: "I know! We can use a moving hamper. If we put Mingus in and take him across the street, he won't be exposed to his fear and he can jump out once the coast is clear.",
+                cond: () => convStage == 4 && this.timesTalkedTo == 2,
+            },
+            {
+                m: "If we're smart about this we can cover the top of the hamper so no one sees Mingus and all Mingus has to do is wait patiently inside the hamper.",
+                cond: () => convStage == 4 && this.timesTalkedTo == 3,
+            },
+            {
+                m: "Moving hampers are also inconspicious in Speare. Let's use this plan. I'm pretty sure there are some hampers in Squashbusters. Bring Mingus to me!",
                 cond: () => {
-                    if (convStage == 4 && this.timesTalkedTo >= 2) {
+                    if (convStage == 4 && this.timesTalkedTo >= 4) {
                         places["Squashbusters"].addToPlace(hamper);
                         convStage = 5;
                         this.timesTalkedTo = 0;
@@ -162,6 +225,18 @@ export function Libra({
                     }
                     return false;
                 }
+            },
+            {
+                m: "MINGUS MY BELOVED!!!!! It's been so long. I could gaze into his jaded yet secretly hopeful eyes forever. Thank you so much, I don't know what I can do to repay you.",
+                cond: () => convStage === 5 && this.timesTalkedTo === 0, // TODO: also detect if Mingus is here
+            },
+            {
+                m: "Well, I suppose I can tell you the one word that's been on my mind: INSERT PASSWORD HERE", // TODO: yeah
+                cond: () => convStage === 5 && this.timesTalkedTo >= 1, // TODO: also detect if Mingus is here
+            },
+            {
+                m: "I can't wait. I hope this goes well.",
+                cond: () => convStage === 5,
             },
         ];
         constructor() {
@@ -173,38 +248,65 @@ export function Libra({
         }
     }
 
-    const loveLetter = new Droppable(
-        "Love Letter",
-        "A message of forbidden love",
-        {
-          use: () =>
-            withVar(setPlaces, (places) =>
-              withVar(setPlayerPlace, (playerPlace) => {
-                return ""; // TODO
-              })
-            ),
-        },
-        false,
-        "https://images-ext-1.discordapp.net/external/0Ied3y_vH3T3NPOb61OQWbxdW15QhBLbCx0Obvn7AmY/https/cdn140.picsart.com/310195452182211.png"
-      );
+    class LoveLetter extends Droppable {
+        active = false
 
-      const hamper = new Droppable(
+        constructor() {
+            super(
+                "Love Letter",
+                "A message of forbidden love",
+                {
+                use: () =>
+                    withVar(setPlaces, (places) =>
+                        withVar(setPlayerPlace, (playerPlace) => {
+                            return ""; // TODO
+                        })
+                    ),
+                },
+                false,
+                "https://images-ext-1.discordapp.net/external/0Ied3y_vH3T3NPOb61OQWbxdW15QhBLbCx0Obvn7AmY/https/cdn140.picsart.com/310195452182211.png"
+            );
+        }
+    };
+
+    class AnotherLoveLetter extends Droppable {
+        active = false
+
+        constructor() {
+            super(
+                "Another Love Letter",
+                "Another message of forbidden love",
+                {
+                use: () =>
+                    withVar(setPlaces, (places) =>
+                        withVar(setPlayerPlace, (playerPlace) => {
+                            return ""; // TODO
+                        })
+                    ),
+                },
+                false,
+                "https://images-ext-1.discordapp.net/external/0Ied3y_vH3T3NPOb61OQWbxdW15QhBLbCx0Obvn7AmY/https/cdn140.picsart.com/310195452182211.png"
+            );
+        }
+    };
+
+    const hamper = new Droppable(
         "Hamper",
         "A container of future forbidden contents",
         {
-          use: () =>
+            use: () =>
             withVar(setPlaces, (places) =>
-              withVar(setPlayerPlace, (playerPlace) => {
+                withVar(setPlayerPlace, (playerPlace) => {
                 return ""; // TODO
-              })
+                })
             ),
         },
         false,
         "https://images-ext-2.discordapp.net/external/9TRYwTCT6f1x5O_KkdeF2DiRRGJXkt5Ckb1NfSFPBmc/https/www.texontowel.com/wp-content/uploads/Dandux-Basket-Truck-Gray-Glosstex-700x649.jpg"
-      );
+    );
 
     useEffect(() => {
         places["Speare"].npcs.push(new Mingus());
-        places["Dodge Hall"].npcs.push(new Paws());
+        places["Krentzman Quad"].npcs.push(new Paws());
     }, []);
 }
