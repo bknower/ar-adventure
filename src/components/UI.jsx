@@ -697,7 +697,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("West F");
+    setPlayerPlace("Meserve Hall");
     var options = { timeout: 5000, enableHighAccuracy: true };
     navigator.geolocation.watchPosition((pos) => {
       withVar(setDebugMode, (debugMode) => {
