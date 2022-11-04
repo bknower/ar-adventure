@@ -64,6 +64,17 @@ const style = {
   p: 4,
 };
 
+var greenIcon = new L.Icon({
+  iconUrl:
+    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+  shadowUrl:
+    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
 const maxDistance = 15;
 
 const errorHandler = (err) => {
@@ -642,6 +653,11 @@ function UI() {
     setInitialized(true);
   }, []);
 
+  const test = L.latLng(42.344547, -71.088532);
+  const playerMarker = useRef(
+    L.marker(test, { icon: greenIcon }).bindTooltip("player")
+  );
+
   useEffect(() => {
     places["ISEC"].items.push(new Shield(true));
     for (const [name, place] of Object.entries(tempPlaces)) {
@@ -650,12 +666,13 @@ function UI() {
     setPlaces((places) => ({ ...places }));
     setPlayerPlace("Dodge Hall");
     var options = { timeout: 5000, enableHighAccuracy: true };
-
     navigator.geolocation.watchPosition((pos) => {
       withVar(setDebugMode, (debugMode) => {
         if (!debugMode) {
           const position = [pos.coords.latitude, pos.coords.longitude];
           setPlayerLocation(L.latLng(position[0], position[1]));
+          playerMarker.current.setLatLng(position);
+          console.log(position);
         }
       });
     }, errorHandler);
@@ -700,10 +717,8 @@ function UI() {
           nearestDistance < 50)
       ) {
         console.log("set player place to " + nearestPlace.name);
-        setPlayerPlace(nearestPlace.name);
       } else {
         setPlayerPlace("Outside");
-        console.log("outside");
       }
     } else {
       firstRun.current = false;
@@ -747,6 +762,7 @@ function UI() {
           setDebugMode={setDebugMode}
           maxDistance={maxDistance}
           markers={markers}
+          playerMarker={playerMarker}
         />
       </div>
       {page === "inventory" && (

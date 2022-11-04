@@ -2,17 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import { withVar } from "./UI";
 
-var greenIcon = new L.Icon({
-  iconUrl:
-    "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41],
-});
-
 const Map = ({
   height,
   map,
@@ -26,6 +15,7 @@ const Map = ({
   setDebugMode,
   maxDistance,
   markers,
+  playerMarker,
 }) => {
   const findNearestPlace = (latlng) => {
     return withVar(setPlaces, (places) => {
@@ -46,11 +36,6 @@ const Map = ({
     });
   };
   const container = document.getElementById("map");
-
-  const test = L.latLng(42.344547, -71.088532);
-
-  //const playerCircle = L.circle(test, { radius: 40 }).addTo(map.current);
-  var playerMarker = L.marker(test, { icon: greenIcon }).bindTooltip("player");
 
   if (container && !map.current) {
     map.current = L.map("map", {
@@ -105,9 +90,11 @@ const Map = ({
       }
     }
 
-    playerMarker.addTo(map.current);
-    playerMarker.setLatLng([42.344232250493214, -71.09175682067873]);
+    // playerMarker.addTo(map.current);
+    // playerMarker.setLatLng([42.344232250493214, -71.09175682067873]);
     map.current.locate({ watch: true });
+    playerMarker.current.addTo(map.current);
+
     // map.current.on("locationfound", (e) => {
     //   withVar(setDebugMode, (debugMode) => {
     //     if (!debugMode) {
