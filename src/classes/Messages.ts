@@ -9,7 +9,6 @@ export class Messages {
 
   send(message: string): void {
     this.log.push(message);
-    console.log(message);
     this.onSend();
   }
 }

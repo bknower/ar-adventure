@@ -52,9 +52,9 @@ const Map = ({
       withVar(setDebugMode, (debugMode) => {
         if (debugMode) {
           console.log([e.latlng.lat, e.latlng.lng]);
-          // navigator.clipboard.writeText(
-          //   "[" + e.latlng.lat + ", " + e.latlng.lng + "]"
-          // );
+          navigator.clipboard.writeText(
+            "[" + e.latlng.lat + ", " + e.latlng.lng + "]"
+          );
           const { nearestDistance, nearestPlace } = findNearestPlace(e.latlng);
           console.log(nearestPlace, nearestDistance);
           if (

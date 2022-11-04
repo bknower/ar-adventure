@@ -50,6 +50,9 @@ import { Leo } from "./quests/Leo";
 import { Capricorn } from "./quests/Capricorn";
 import { Taurus } from "./quests/Taurus";
 import { Libra } from "./quests/Libra";
+import { Aquarius } from "./quests/Aquarius";
+import { Final } from "./quests/Final";
+import { Virgo } from "./quests/Virgo";
 
 /*global globalThis*/
 
@@ -129,7 +132,7 @@ function UI() {
   const [inventory, setInventory] = useState([]);
   const [playerPlace, setPlayerPlace] = useState("Outside");
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
-  const [debugMode, setDebugMode] = useState(false);
+  const [debugMode, setDebugMode] = useState(true);
   const [itemEvent, setItemEvent] = useState(false);
   const markers = useRef([]);
 
@@ -233,7 +236,7 @@ function UI() {
     new Place(
       "Krentzman Quad",
       "",
-      L.latLng([42.340088791335084, -71.0883128643036]),
+      L.latLng([42.34024739766851, -71.08844320888325]),
       () => {}
     ),
     new Place(
@@ -269,7 +272,7 @@ function UI() {
     new Place(
       "Smolly's",
       "",
-      L.latLng([42.33730518506171, -71.09216988086702]),
+      L.latLng([42.337376561120806, -71.09207433381216]),
       () => {}
     ),
     new Place(
@@ -359,7 +362,7 @@ function UI() {
     new Place(
       "Mugar Life Sciences",
       "",
-      L.latLng([42.33961296993443, -71.08698248863222]),
+      L.latLng([42.34004120935708, -71.0873063565693]),
       () => {}
     ),
     new Place(
@@ -414,7 +417,7 @@ function UI() {
     new Place(
       "West B",
       "",
-      L.latLng([42.3373408731014, -71.09235763549806]),
+      L.latLng([42.33774930144655, -71.09227796255537]),
       () => {}
     ),
     new Place(
@@ -444,31 +447,31 @@ function UI() {
     new Place(
       "Cargill Hall",
       "",
-      L.latLng([42.33900232719481, -71.09167098999025]),
+      L.latLng([42.33883182199418, -71.09166155562046]),
       () => {}
     ),
     new Place(
-      "Stearns Center",
+      "Knowles Center",
       "",
-      L.latLng([42.33911335358854, -71.09142959117891]),
+      L.latLng([42.339390918715246, -71.09082982450353]),
       () => {}
     ),
     new Place(
       "Kariotis Hall",
       "",
-      L.latLng([42.33859787224553, -71.09100580215456]),
+      L.latLng([42.338661316331184, -71.0908457376875]),
       () => {}
     ),
     new Place(
       "Meserve Hall",
       "",
-      L.latLng([42.33761051541322, -71.09095752239229]),
+      L.latLng([42.33760655009348, -71.09103379639922]),
       () => {}
     ),
     new Place(
       "Holmes Hall",
       "",
-      L.latLng([42.337876191266105, -71.09093070030214]),
+      L.latLng([42.337903948379996, -71.09102811770785]),
       () => {}
     ),
     new Place(
@@ -504,7 +507,7 @@ function UI() {
     new Place(
       "Robinson Hall",
       "",
-      L.latLng([42.33932351015426, -71.08676791191102]),
+      L.latLng([42.339168866711915, -71.08665190776232]),
       () => {}
     ),
     new Place(
@@ -522,7 +525,7 @@ function UI() {
     new Place(
       "Willis Hall",
       "",
-      L.latLng([42.338106178411465, -71.09122574329378]),
+      L.latLng([42.33824892863032, -71.09133387934291]),
       () => {}
     ),
     new Place(
@@ -559,6 +562,36 @@ function UI() {
       "Orange Line Stop",
       "Oak Grove or Forest Hills?",
       L.latLng([42.33671038141871, -71.08924090862276]),
+      () => {}
+    ),
+    new Place(
+      "Behrakis",
+      "",
+      L.latLng([42.3369641649945, -71.09125368317764]),
+      () => {}
+    ),
+    new Place(
+      "Westland Gate",
+      "",
+      L.latLng([42.34407365421169, -71.09000936413175]),
+      () => {}
+    ),
+    new Place(
+      "Huntington Dunkin'",
+      "",
+      L.latLng([42.34178585834087, -71.08633527119659]),
+      () => {}
+    ),
+    new Place(
+      "Hunter Statue",
+      "",
+      L.latLng([42.34010861714865, -71.0947176753505]),
+      () => {}
+    ),
+    new Place(
+      "Law Quad",
+      "",
+      L.latLng([42.3390776665548, -71.0911676758166]),
       () => {}
     ),
   ];
@@ -645,7 +678,7 @@ function UI() {
     for (let place of locations) {
       places[place.name] = place;
     }
-    setPage("nearme");
+    setPage("map");
 
     globalThis.log = new Messages(() => {
       setShowMessage(true);
@@ -665,7 +698,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("Dodge Hall");
+    setPlayerPlace("Meserve Hall");
     var options = { timeout: 5000, enableHighAccuracy: true };
     navigator.geolocation.watchPosition((pos) => {
       withVar(setDebugMode, (debugMode) => {
@@ -718,6 +751,7 @@ function UI() {
           nearestDistance < 50)
       ) {
         console.log("set player place to " + nearestPlace.name);
+        setPlayerPlace(nearestPlace.name);
       } else {
         setPlayerPlace("Outside");
       }
@@ -747,7 +781,18 @@ function UI() {
         map,
         markers,
         maxDistance,
-        children: [Pisces, Gemini, Aries, Leo, Capricorn, Taurus, Libra],
+        children: [
+          Pisces,
+          Gemini,
+          Aries,
+          Leo,
+          Capricorn,
+          Taurus,
+          Aquarius,
+          Final,
+          Virgo,
+          Libra
+        ],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
         <Map
