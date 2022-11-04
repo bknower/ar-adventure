@@ -651,28 +651,14 @@ function UI() {
     setPlayerPlace("Dodge Hall");
     var options = { timeout: 5000, enableHighAccuracy: true };
 
-    // navigator.geolocation.watchPosition((pos) => {
-    //   withVar(setDebugMode, (debugMode) => {
-    //     if (!debugMode) {
-    //       const position = [pos.coords.latitude, pos.coords.longitude];
-    //       setPlayerLocation(L.latLng(position[0], position[1]));
-    //     }
-    //   });
-    // }, errorHandler);
-    setInterval(() => {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          withVar(setDebugMode, (debugMode) => {
-            if (!debugMode) {
-              const position = [pos.coords.latitude, pos.coords.longitude];
-              setPlayerLocation(L.latLng(position[0], position[1]));
-            }
-          });
-        },
-        () => {},
-        options
-      );
-    }, 100);
+    navigator.geolocation.watchPosition((pos) => {
+      withVar(setDebugMode, (debugMode) => {
+        if (!debugMode) {
+          const position = [pos.coords.latitude, pos.coords.longitude];
+          setPlayerLocation(L.latLng(position[0], position[1]));
+        }
+      });
+    }, errorHandler);
   }, [initialized]);
 
   const updatePageHeight = () => {
@@ -694,14 +680,13 @@ function UI() {
 
   const firstRun = useRef(true);
   useEffect(() => {
-    if (!firstRun.current && !debugMode && playerLocation !== null) {
+    if (!firstRun.current && !debugMode) {
       var nearestDistance = 999999999;
       var nearestPlace = "";
 
       for (const [name, place] of Object.entries(places)) {
         const location = place.location;
         if (location) {
-          console.log("playerlocation", playerLocation);
           var distance = playerLocation.distanceTo(L.latLng(location));
           if (distance < nearestDistance) {
             nearestDistance = distance;
