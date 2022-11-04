@@ -51,6 +51,7 @@ import { Capricorn } from "./quests/Capricorn";
 import { Taurus } from "./quests/Taurus";
 import { Aquarius } from "./quests/Aquarius";
 import { Final } from "./quests/Final";
+import { Virgo } from "./quests/Virgo";
 
 /*global globalThis*/
 
@@ -788,6 +789,7 @@ function UI() {
           Taurus,
           Aquarius,
           Final,
+          Virgo,
         ],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
