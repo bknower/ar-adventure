@@ -163,13 +163,13 @@ export function Leo({
                 () => {}
               );
               project.npcs.push(new Aoun());
-              L.circle(project.location, { radius: 45 }).addTo(map.current);
+              L.circle(project.location, { radius: 30 }).addTo(map.current);
               L.marker(project.location)
                 .bindTooltip(project.name)
                 .addTo(map.current);
               places["Great Construction Project"] = project;
               setPlaces(places);
-              setPlayerPlace("Great Construction Project");
+              setPlayerPlace("Outside");
               return true;
             }
             return false;
@@ -178,10 +178,6 @@ export function Leo({
       {
         m: "No, this is all wrong! You need to try something else.",
         cond: () => !this.ready && this.timesTalkedTo > 4,
-      },
-      {
-        m: "Thanks so much for your help! I'll tell you the important thing now: valor",
-        cond: () => this.ready,
       },
     ];
     constructor() {
