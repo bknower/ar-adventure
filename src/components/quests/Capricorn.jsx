@@ -40,7 +40,7 @@ export function Capricorn({
       },
       {
         m:
-          `Visit the other two Dunkin' locations
+          `Visit the other two Dunkin' locations (not the one on Huntington)
         on campus within the next ` +
           time / 60 +
           ` minutes and return to me as fast as you can. Your time starts now!

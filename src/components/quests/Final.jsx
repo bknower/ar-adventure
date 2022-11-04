@@ -421,15 +421,15 @@ export function Final({
     passwords = {
       lion: "valor",
       ram: "determination",
-      crab: "resilience",
+      //crab: "resilience",
       bull: "fortitude",
       twins: "facsimile",
       maiden: "purity",
-      scales: "justice",
-      scorpion: "passion",
-      archer: "adventure",
+      //scales: "justice",
+      //scorpion: "passion",
+      //archer: "adventure",
       goat: "nimblefooted",
-      waterbearer: "friendship",
+      //waterbearer: "friendship",
       fish: "antediluvian",
     };
 
