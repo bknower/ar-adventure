@@ -52,6 +52,7 @@ import { Taurus } from "./quests/Taurus";
 import { Aquarius } from "./quests/Aquarius";
 import { Final } from "./quests/Final";
 import { Virgo } from "./quests/Virgo";
+import { Sagittarius } from "./quests/Sagittarius";
 
 /*global globalThis*/
 
@@ -697,7 +698,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("Meserve Hall");
+    setPlayerPlace("Hunter Statue");
     var options = { timeout: 5000, enableHighAccuracy: true };
     navigator.geolocation.watchPosition((pos) => {
       withVar(setDebugMode, (debugMode) => {
@@ -790,6 +791,7 @@ function UI() {
           Aquarius,
           Final,
           Virgo,
+          Sagittarius,
         ],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
