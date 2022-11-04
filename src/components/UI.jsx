@@ -698,7 +698,7 @@ function UI() {
       places[name] = place;
     }
     setPlaces((places) => ({ ...places }));
-    setPlayerPlace("Hunter Statue");
+    setPlayerPlace("Outside");
     var options = { timeout: 5000, enableHighAccuracy: true };
     navigator.geolocation.watchPosition((pos) => {
       withVar(setDebugMode, (debugMode) => {
@@ -726,7 +726,11 @@ function UI() {
   }, [bottomBarRef, page]);
 
   useEffect(() => {
-    setPage("nearme");
+    if (playerPlace === "Outside") {
+      setPage("map");
+    } else {
+      setPage("nearme");
+    }
   }, [playerPlace]);
 
   const firstRun = useRef(true);

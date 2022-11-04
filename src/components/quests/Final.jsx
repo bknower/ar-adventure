@@ -45,17 +45,17 @@ export function Final({
     };
      */
     messages = [
-      "Aries",
+      "Aries: go to the place you'd least want to hear a ram stomping around.",
       "Taurus: visit the home of the Bull and Bear club",
       "Gemini: find the sculpture by this name",
-      "Cancer: visit the site of a crustaceous world record at Northeastern",
+      // "Cancer: visit the site of a crustaceous world record at Northeastern",
       "Leo: visit the gate guarded by the lions",
       "Virgo: find the maiden that towers over the campus",
-      "Libra: visit the home of law at Northeastern",
-      "Scorpio: where might you study the removal of a scorpion's poison?",
-      "Sagittarius: where does the stone archer stand in waiting",
+      // "Libra: visit the home of law at Northeastern",
+      // "Scorpio: where might you study the removal of a scorpion's poison?",
+      "Sagittarius: where does the bronze archer stand in waiting",
       "Capricorn: which Huntington coffee shop is the GOAT?",
-      "Aquarius: what flowing water does the water bearer drink from?",
+      // "Aquarius: what flowing water does the water bearer drink from?",
       "Pisces: find the home of the fish",
     ];
     constructor() {
@@ -110,7 +110,8 @@ export function Final({
         Hurry, for a husky has yet to be found
         Be ready for a supernatural scare
         If you do not find the soon to be pair
-        
+        One item to help you along your trek
+        May be found close by in ISEC
         `;
       },
     },
@@ -157,10 +158,10 @@ export function Final({
     "A totem of the maiden",
     {
       use: () => {
-        return `Enter the Curry Student Center to begin
-        Find the sculpture of the twins
-        Journey to a place where you can find a drink
-        But don’t forget to pay your tab
+        return `A maiden awaits for you at Meserve
+        She alone evaluates your fates
+        Fulfill the quests that for you she reserves
+        Be clever and make few mistakes        
         `;
       },
     },
@@ -230,10 +231,11 @@ export function Final({
     "A totem of the water bearer",
     {
       use: () => {
-        return `Enter the Curry Student Center to begin
-        Find the sculpture of the twins
-        Journey to a place where you can find a drink
-        But don’t forget to pay your tab
+        return `Birds and coins may rest within me
+        But without water how can that be!
+        Help deliver not too fast or too slow
+        Just enough to revive my glow!
+        
         `;
       },
     },
@@ -257,7 +259,7 @@ export function Final({
     "https://www.thelist.com/img/gallery/heres-what-pisces-season-will-mean-for-your-zodiac-sign/l-intro-1614095688.jpg"
   );
 
-  const threshold = 1;
+  const threshold = 6;
 
   class Cthulu extends NPC {
     correctAnswers = 0;
@@ -267,6 +269,9 @@ export function Final({
         Each sign of the zodiac will be its own test
         Complete them all and return back here
         Your rewards will be great – do not fear
+
+        (There were supposed to be 12 but we ran out of time, so there are actually only 8. 
+          Ignore any references to the other 4 signs)
         
         `,
       },
@@ -342,7 +347,7 @@ export function Final({
         m: `What word is most important to the scales?`,
         cond: () => this.timesTalkedTo === 9,
         input: (answer) => {
-          if (answer.toLowerCase() === "valor") {
+          if (answer.toLowerCase() === "feasdfesaef") {
             this.correctAnswers++;
           }
         },
@@ -351,7 +356,7 @@ export function Final({
         m: `What word is most important to the scorpion?`,
         cond: () => this.timesTalkedTo === 10,
         input: (answer) => {
-          if (answer.toLowerCase() === "valor") {
+          if (answer.toLowerCase() === "kejsfjiejesfsf") {
             this.correctAnswers++;
           }
         },
@@ -360,7 +365,7 @@ export function Final({
         m: `What word is most important to the archer?`,
         cond: () => this.timesTalkedTo === 11,
         input: (answer) => {
-          if (answer.toLowerCase() === "valor") {
+          if (answer.toLowerCase() === "precision") {
             this.correctAnswers++;
           }
         },
@@ -378,7 +383,7 @@ export function Final({
         m: `What word is most important to the waterbearer?`,
         cond: () => this.timesTalkedTo === 13,
         input: (answer) => {
-          if (answer.toLowerCase() === "valor") {
+          if (answer.toLowerCase() === "valfafafefsfdccor") {
             this.correctAnswers++;
           }
         },
@@ -403,7 +408,7 @@ export function Final({
       //   },
       // },
       {
-        m: "You have completed the challenge. Visit the following link to claim your prize: ",
+        m: "You have completed the challenge. Visit the following link to claim your prize: https://bit.ly/3zJv4f4",
         cond: () =>
           this.timesTalkedTo >= 15 && this.correctAnswers >= threshold,
       },
@@ -446,15 +451,15 @@ export function Final({
     places["West F"].npcs.push(new Cthulu());
     places["Dodge Hall"].items.push(taurus);
     places["Law Quad"].items.push(gemini);
-    places["Centennial"].items.push(cancer);
+    // places["Centennial"].items.push(cancer);
     places["Westland Gate"].items.push(leo);
     places["Meserve Hall"].items.push(virgo);
-    places["Knowles Center"].items.push(libra);
-    places["Behrakis"].items.push(scorpio);
+    // places["Knowles Center"].items.push(libra);
+    // places["Behrakis"].items.push(scorpio);
     places["Hunter Statue"].items.push(sagittarius);
     places["Huntington Dunkin'"].items.push(capricorn);
-    places["Raytheon Amphitheater"].items.push(aquarius);
+    // places["Raytheon Amphitheater"].items.push(aquarius);
     places["Koi Pond"].items.push(pisces);
-    // places["Somewhere"].items.push(aries);
+    places["Snell Library"].items.push(aries);
   }, []);
 }
