@@ -49,6 +49,7 @@ import { Aries } from "./quests/Aries";
 import { Leo } from "./quests/Leo";
 import { Capricorn } from "./quests/Capricorn";
 import { Taurus } from "./quests/Taurus";
+import { Libra } from "./quests/Libra";
 import { Aquarius } from "./quests/Aquarius";
 import { Final } from "./quests/Final";
 import { Virgo } from "./quests/Virgo";
@@ -790,6 +791,7 @@ function UI() {
           Aquarius,
           Final,
           Virgo,
+          Libra
         ],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>
