@@ -848,7 +848,7 @@ function UI() {
             label="Near Me"
             onClick={() => setPage("nearme")}
           ></BottomNavigationAction>
-          <BottomNavigationAction
+          {/* <BottomNavigationAction
             icon={
               <FormControlLabel
                 control={
@@ -860,7 +860,7 @@ function UI() {
               />
             }
             label="Debug Mode"
-          ></BottomNavigationAction>
+          ></BottomNavigationAction> */}
         </BottomNavigation>
       </Paper>
     </>
