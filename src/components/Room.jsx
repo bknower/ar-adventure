@@ -20,7 +20,6 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import { Aoun } from "../classes/NPCs";
 import { Person } from "./Person";
 import { ItemList } from "./ItemList";
 

@@ -20,7 +20,6 @@ import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
-import { Aoun } from "../classes/NPCs";
 import { Person } from "./Person";
 import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
@@ -113,7 +112,6 @@ export const Item = ({ item, i }) => {
                 onChange={(e) => setAnswer(e.target.value)}
                 fullWidth
                 onKeyPress={(ev) => {
-                  console.log(`Pressed keyCode ${ev.key}`);
                   if (ev.key === "Enter") {
                     submit();
                     ev.preventDefault();

@@ -51,25 +51,15 @@ const Map = ({
     map.current.on("click", (e) => {
       withVar(setDebugMode, (debugMode) => {
         if (debugMode) {
-          console.log([e.latlng.lat, e.latlng.lng]);
           navigator.clipboard.writeText(
             "[" + e.latlng.lat + ", " + e.latlng.lng + "]"
           );
           const { nearestDistance, nearestPlace } = findNearestPlace(e.latlng);
-          console.log(nearestPlace, nearestDistance);
           if (
             nearestDistance < maxDistance ||
             (nearestPlace.name === "Great Construction Project" &&
               nearestDistance < 50)
           ) {
-            console.log(
-              "You are near " +
-                nearestPlace.name +
-                " (" +
-                nearestDistance.toFixed(2) +
-                " meters)"
-            );
-            console.log("set player place to " + nearestPlace.name);
             setPlayerPlace(nearestPlace.name);
           }
         }
@@ -84,7 +74,6 @@ const Map = ({
         );
         const marker = L.marker(location).bindTooltip(name).addTo(map.current);
         if (["Lake Hall", "Holmes Hall", "Nightingale Hall"].includes(name)) {
-          console.log(name);
           markers.current.push({ circle: circle, marker: marker });
         }
       }

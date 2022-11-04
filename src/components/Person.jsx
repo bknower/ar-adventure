@@ -120,7 +120,6 @@ export const Person = ({ person }) => {
                 onChange={(e) => setAnswer(e.target.value)}
                 fullWidth
                 onKeyPress={(ev) => {
-                  console.log(`Pressed keyCode ${ev.key}`);
                   if (ev.key === "Enter") {
                     submit();
                     ev.preventDefault();

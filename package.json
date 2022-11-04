@@ -33,7 +33,7 @@
     "start": "react-app-rewired start",
     "dev": "webpack serve",
     "//": " change this to build: webpack to use obfuscation",
-    "build": "react-scripts build",
+    "build": "webpack",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

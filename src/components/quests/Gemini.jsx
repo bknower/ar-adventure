@@ -175,7 +175,6 @@ export function Gemini({
     places["Matthews Arena"].npcs = [new Dog()];
     places["Hayden Hall"].npcs = [new ProfessorGurdon()];
     places["ISEC"].items.push(new CerebralScanner());
-    console.log("test");
   }, []);
   useEffect(() => {
     if (inventory.some((item) => item.name === "Cerebral Scanner")) {

@@ -444,7 +444,6 @@ export function Final({
         "The ancient beast towers over you.",
         "https://megapencil.co/wp-content/uploads/2021/06/CthulhuNrThreeSR.jpg"
       );
-      console.log(this.messages);
     }
   }
   useEffect(() => {

@@ -149,7 +149,6 @@ export function Leo({
             ) {
               this.ready = true;
               markers.current.forEach((marker) => {
-                console.log(marker, markers.current);
                 marker.circle.remove();
                 marker.marker.remove();
               });

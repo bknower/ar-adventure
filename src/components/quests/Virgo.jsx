@@ -172,7 +172,6 @@ export function Virgo({
       {
         m: "Be careful near Meserve. The maiden is a wrathful diety.",
         cond: () => {
-          console.log("Foo");
           return withVar(setPlaces, (places) => {
             return places["Meserve Hall"].npcs[0].timesTalkedTo === 0;
           });

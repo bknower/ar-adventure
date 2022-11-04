@@ -32,14 +32,12 @@ function LocationMarker() {
 }
 
 function Map({ game, height }) {
-  console.log("render map. height: ", height);
   // Before map is being initialized.
   var mapsPlaceholder = [];
 
   L.Map.addInitHook(function () {
     mapsPlaceholder.push(this); // Use whatever global scope variable you like.
   });
-  console.log("maps", mapsPlaceholder);
   return (
     <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: height }}>
       <TileLayer

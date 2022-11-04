@@ -41,7 +41,6 @@ import { Messages } from "../classes/Messages";
 import Room from "./Room";
 import DialogueTree from "react-dialogue-tree";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
-import { Aoun, Paws } from "../classes/NPCs";
 import { Pisces } from "./quests/Pisces";
 import { QuestWrapper } from "./QuestWrapper";
 import { Gemini } from "./quests/Gemini";
@@ -53,6 +52,7 @@ import { Aquarius } from "./quests/Aquarius";
 import { Final } from "./quests/Final";
 import { Virgo } from "./quests/Virgo";
 import { Sagittarius } from "./quests/Sagittarius";
+import { Challenge } from "./quests/Challenge";
 
 /*global globalThis*/
 
@@ -132,7 +132,7 @@ function UI() {
   const [inventory, setInventory] = useState([]);
   const [playerPlace, setPlayerPlace] = useState("Outside");
   const [playerLocation, setPlayerLocation] = useState(L.latLng([0, 0]));
-  const [debugMode, setDebugMode] = useState(true);
+  const [debugMode, setDebugMode] = useState(false);
   const [itemEvent, setItemEvent] = useState(false);
   const markers = useRef([]);
 
@@ -656,24 +656,6 @@ function UI() {
     }
   }
 
-  class Shield extends Droppable {
-    constructor(dropped) {
-      super(
-        "Shield",
-        "A shield",
-        {
-          defend: () => {
-            addToInventory(new Shield(false));
-          },
-          attack: () => {
-            console.log("You bash the enemy with your shield!");
-          },
-        },
-        dropped
-      );
-    }
-  }
-
   useEffect(() => {
     for (let place of locations) {
       places[place.name] = place;
@@ -693,7 +675,6 @@ function UI() {
   );
 
   useEffect(() => {
-    places["ISEC"].items.push(new Shield(true));
     for (const [name, place] of Object.entries(tempPlaces)) {
       places[name] = place;
     }
@@ -706,7 +687,6 @@ function UI() {
           const position = [pos.coords.latitude, pos.coords.longitude];
           setPlayerLocation(L.latLng(position[0], position[1]));
           playerMarker.current.setLatLng(position);
-          console.log(position);
         }
       });
     }, errorHandler);
@@ -754,7 +734,6 @@ function UI() {
         (nearestPlace.name === "Great Construction Project" &&
           nearestDistance < 50)
       ) {
-        console.log("set player place to " + nearestPlace.name);
         setPlayerPlace(nearestPlace.name);
       } else {
         setPlayerPlace("Outside");
@@ -796,6 +775,7 @@ function UI() {
           Final,
           Virgo,
           Sagittarius,
+          Challenge,
         ],
       })}
       <div style={{ display: page === "map" ? "block" : "none" }}>

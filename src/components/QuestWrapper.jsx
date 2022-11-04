@@ -41,7 +41,6 @@ import { Messages } from "../classes/Messages";
 import Room from "./Room";
 import DialogueTree from "react-dialogue-tree";
 import "react-dialogue-tree/dist/react-dialogue-tree.css";
-import { Aoun, Paws } from "../classes/NPCs";
 import { Shield, Sword } from "../classes/Items";
 
 export function QuestWrapper(props) {
