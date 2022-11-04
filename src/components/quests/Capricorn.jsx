@@ -24,7 +24,7 @@ export function Capricorn({
   map,
   markers,
 }) {
-  const time = 45;
+  const time = 450;
   const visited = useRef([]);
   class Goat extends NPC {
     timeTaken = 0;
@@ -92,6 +92,7 @@ export function Capricorn({
           if (this.timeTaken >= time) {
             this.timeTaken = 0;
             clearInterval(this.interval);
+            visited.current = [];
             this.timesTalkedTo = 1;
             setPlaces((x) => {
               return { ...x };

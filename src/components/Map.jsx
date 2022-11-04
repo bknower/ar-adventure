@@ -26,8 +26,25 @@ const Map = ({
   setDebugMode,
   maxDistance,
   markers,
-  findNearestPlace,
 }) => {
+  const findNearestPlace = (latlng) => {
+    return withVar(setPlaces, (places) => {
+      var nearestDistance = 999999999;
+      var nearestPlace = "";
+
+      for (const [name, place] of Object.entries(places)) {
+        const location = place.location;
+        if (location) {
+          var distance = latlng.distanceTo(L.latLng(location));
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearestPlace = place;
+          }
+        }
+      }
+      return { nearestPlace: nearestPlace, nearestDistance: nearestDistance };
+    });
+  };
   const container = document.getElementById("map");
 
   const test = L.latLng(42.344547, -71.088532);
@@ -91,10 +108,18 @@ const Map = ({
     playerMarker.addTo(map.current);
     playerMarker.setLatLng([42.344232250493214, -71.09175682067873]);
     map.current.locate({ watch: true });
-    map.current.on("locationfound", (e) => {
-      playerMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
-      setPlayerLocation([e.latlng.lat, e.latlng.lng]);
-    });
+    // map.current.on("locationfound", (e) => {
+    //   withVar(setDebugMode, (debugMode) => {
+    //     if (!debugMode) {
+    //       setPlayerLocation(L.latLng(e.latlng.lat, e.latlng.lng));
+    //     }
+    //   });
+    // });
+
+    // map.current.on("locationfound", (e) => {
+    //   playerMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
+    //   setPlayerLocation([e.latlng.lat, e.latlng.lng]);
+    // });
     // map.current.on("locationerror", (e) => {
     //   console.log("location error");
     // });

@@ -21,12 +21,6 @@ export function Pisces({
   addToPlace,
   removeFromPlace,
 }) {
-  const Sword = new Droppable("Sword", "A sword", {
-    attack: () => {
-      console.log("You swing your sword at the enemy!");
-    },
-  });
-
   class FishMan extends NPC {
     found = false;
     messages = [
