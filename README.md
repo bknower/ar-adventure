@@ -4,7 +4,7 @@ This project was made for Husky Hunt, Northeastern University's 24-hour scavenge
 
 In this game, you must complete a series of 8 quests, each based on a sign of the Zodiac, by walking around campus to visit virtual markers, talking to NPCs, and collecting and using items.
 
-Try it out for yourself [here](https://hh-ar-adventure.vercel.app/) (you need to be on the Northeastern campus to play it).
+Try it out for yourself [here](https://hh-ar-adventure.vercel.app/) (you need to be on the Northeastern campus to play it, unless you run it locally and enable debug mode).
 
 ## How to run locally
 
